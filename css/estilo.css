@@ -1,0 +1,152 @@
+.debug{
+    background-color: #000 !important;
+}
+
+.centered{
+    margin: 0 auto;
+    float: none;
+}
+
+.tudo-maiusc{
+    text-transform: uppercase !important;
+}
+
+.tudo-minusc{
+    text-transform: lowercase !important;
+}
+
+.nounderline{
+    text-decoration:none !important;
+}
+
+.margin-top-10{
+    margin-top:10px !important;
+}
+
+.margin-top-20{
+    margin-top:20px !important;
+}
+
+.margin-top-24{
+    margin-top:24px !important;
+}
+
+.margin-bottom-20{
+    margin-bottom:20px !important;
+}
+
+.margin-bottom-24{
+    margin-bottom:24px !important;
+}
+
+.margin-bottom-50{
+    margin-bottom:50px !important;
+}
+
+.margin-left-20{
+    margin-left:20px !important;
+}
+
+.margin-left-10{
+    margin-left:10px !important;
+}
+
+.margin-right-10{
+    margin-right:10px !important;
+}
+
+.no-padding{
+    padding: 0px !important;
+}
+
+.no-padding-right-0{
+    padding-right: 0px !important;
+}
+
+.color-blank{
+    color: #fff !important;
+}
+
+.color-red{
+    color: #ff0000 !important;
+}
+
+.color-cinza-sistema{
+    color: #777 !important;
+}
+
+.primeira-maiusc{
+    text-transform: capitalize !important;
+}
+
+.width-200-horizontal{
+    width: 200px !important;    
+}
+
+.width-160-horizontal{
+    width: 160px !important;    
+}
+
+.width-100-horizontal{
+    width: 100px !important;    
+}
+
+.width-100-porc{
+    width: 100% !important;
+}
+
+.height-32{
+    height: 32px !important;
+}
+
+.texto-negrito{
+    font-weight: bold !important;
+}
+
+.btn-comanda{
+    width: 100% !important;
+    height:100px !important;
+    font-size:30px !important;
+    font-weight:bold !important;
+}
+
+.btn-comanda-enter{
+    width: 100% !important;
+    height:204px !important;
+    font-size:25px !important;
+    font-weight:bold !important;
+    padding:0px !important;
+}
+
+.barra-rodape{
+    position:fixed;
+    bottom:0;
+    width:100%;
+    height:20px;
+    background-color:#eeeeee;
+    color:#007aff;
+    font-size:12px;
+    border:1px;
+    border-top:1px;
+    border-style:solid;
+    border-color:#007aff;
+}
+
+.barra-rodape-tablet{
+    position: fixed !important;
+    bottom: 0 !important;
+    width: 100% !important;
+}
+
+.barra-rodape-tablet button{
+    border-radius: 0px !important;
+}
+
+.btn-comanda-mapa:hover{
+    cursor: pointer !important;
+}
+
+.btn-tablet-rest{
+    height: 80px !important;
+    letter-spacing: 3px !important;
+}
