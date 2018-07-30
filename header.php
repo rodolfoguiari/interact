@@ -18,6 +18,7 @@ include_once('config/connect_base.php');
         <meta name="author" content="">
 
         <!-- Bootstrap Styles -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> </link>
         <link href="<?php echo URL_BASE; ?>assets/css/bootstrap.min.css" rel="stylesheet">
         <link href="<?php echo URL_BASE; ?>style.css" rel="stylesheet">
         <link href="<?php echo URL_BASE; ?>css/estilo.css" rel="stylesheet">
@@ -83,6 +84,7 @@ include_once('config/connect_base.php');
         
         <script src="<?php echo URL_BASE; ?>rs-plugin/js/jquery.themepunch.plugins.min.js"></script>
         <script src="<?php echo URL_BASE; ?>rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
+        
 
         <script type="text/javascript">
             var revapi;
@@ -101,5 +103,4 @@ include_once('config/connect_base.php');
         
     </head>
     <body>
-        <input type="hidden" id="resposta" />
         <div id="wrapper">
