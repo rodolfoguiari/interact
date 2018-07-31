@@ -20,7 +20,7 @@ include_once('topo.php');
                 <div class="breadcrumb-container">
                     <ul class="breadcrumb">
                         <li><a href="<?php echo URL_BASE; ?>">Início</a></li>
-                        <li class="active">Sobre Nós</li>
+                        <li class="active">BOBY LINDÃO !</li>
                     </ul>
                 </div>
             </div>
