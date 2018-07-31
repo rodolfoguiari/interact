@@ -1,5 +1,4 @@
 <?php
-
 include_once('../header.php');
 include_once('topo.php');
 ?>
@@ -20,7 +19,7 @@ include_once('topo.php');
             <div class="col-md-6">
                 <div class="breadcrumb-container">
                     <ul class="breadcrumb">
-                        <li><a href="../index.php">Início</a></li>
+                        <li><a href="<?php echo URL_BASE; ?>">Início</a></li>
                         <li class="active">Sobre Nós</li>
                     </ul>
                 </div>
