@@ -122,6 +122,22 @@ if(!empty($acao)){
             exit;
         }
         
+    } elseif($acao == 'edtUser'){
+        
+        $user = $_POST['cd_usuario'];
+        
+        include_once('../class/classUsuario.php');
+        $usuario = new classUsuario();
+        $usuario->SelectUsuario($user);
+        
+        echo json_encode($usuario);
+        exit;
+        
+    } elseif($acao == 'salvarEdtUser'){
+        
+        print_r($_POST);
+        exit;
+        
     }
     
 }
