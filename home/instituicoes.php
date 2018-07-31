@@ -13,7 +13,7 @@ include_once('topo.php');
             <div class="col-lg-6 col-sm-6 col-md-6">
                 <div class="breadcrumb-container">
                     <ul class="breadcrumb">
-                        <li><a href="../index.php">Início</a></li>
+                        <li><a href="<?php echo URL_BASE; ?>">Início</a></li>
                         <li class="active">Instituições</li>
                     </ul>
                 </div>
@@ -30,8 +30,6 @@ include_once('topo.php');
                 <h2>Ajude alguma das <span>Instiuições</span> cadastradas</h2>
                 <p>Confira quais são e como ajudá-las. Clique em cima da instituição desejada.</p>
             </div>
-
-
             <div class="clearfix"></div>
 
             <section class="portfolio">
