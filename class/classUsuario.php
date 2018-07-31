@@ -21,6 +21,7 @@ class classUsuario{
     public $cd_operado;
     public $cd_acessos;
     public $ds_senhass;
+    public $cd_generos;
     
     public function SelectUsuario($id_usuario){
         $sql = mysql_query("SELECT usuario.*, estado.sg_estado, cidade.nm_cidade FROM usuario
@@ -49,6 +50,7 @@ class classUsuario{
             $this->cd_operado = $qr['cd_operado'];
             $this->cd_acessos = $qr['cd_acessos'];
             $this->ds_senhass = $qr['ds_senhass'];
+            $this->cd_generos = $qr['cd_generos'];
         }
         
     }

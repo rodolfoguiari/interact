@@ -135,7 +135,59 @@ if(!empty($acao)){
         
     } elseif($acao == 'salvarEdtUser'){
         
-        print_r($_POST);
+        $formUserAdmin = $_POST['formUserAdmin'];
+        
+        $insert = "UPDATE usuario SET ";
+        $value = "";
+        $condicao = " WHERE cd_usuario = ";
+        foreach($formUserAdmin as $idx => $campos){
+            if($idx == 0){
+                $condicao .= $campos['value'];
+            } else {
+                
+                if($campos['name'] == 'dt_nascime' && empty($campos['value'])){
+                    $campos['value'] = '1900-01-01';
+                }
+                
+                $value .= $campos['name'] . " = '" . $campos['value'] . "', ";
+                
+            }
+        }
+        
+        mysql_query("SET AUTOCOMMIT=0");
+        mysql_query("START TRANSACTION");
+        
+        $query = $insert . substr($value,0,-2) . $condicao;
+        $sql = mysql_query($query);
+        
+        if($sql == true){
+            mysql_query("COMMIT");
+            echo 'QUERY_TRUE';
+            exit;
+        } else {
+            mysql_query("ROLLBACK");
+            echo 'QUERY_FALSE';
+            exit;
+        }
+        
+    } elseif($acao == 'listaUser'){
+        
+        $result = "";
+        $sql = mysql_query("SELECT cd_usuario, UPPER(nm_usuario) AS nm_usuario, UPPER(ds_enderec) AS ds_enderec, UPPER(nr_enderec) AS nr_enderec, nr_telefon
+                            FROM usuario ORDER BY nm_usuario ASC");
+        while($qr = mysql_fetch_array($sql)){
+
+            $result .= '<tr>
+                            <td>'.$qr['cd_usuario'].'</td>
+                            <td>'.$qr['nm_usuario'].'</td>
+                            <td>'.$qr['ds_enderec']. ', ' . $qr['nr_enderec'] .'</td>
+                            <td>'.$qr['nr_telefon'].'</td>
+                            <td><button type="button" class="btn btn-sm btn-primary" onclick="edtUser('.$qr['cd_usuario'].')">Editar</button></td>
+                        </tr>';
+
+        }
+        
+        echo $result;
         exit;
         
     }
