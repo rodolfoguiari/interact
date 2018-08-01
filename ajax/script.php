@@ -1,6 +1,5 @@
 <?php
 "
-
 CREATE TABLE IF NOT EXISTS empdetalhe (
     cd_codidet int(11) NOT NULL DEFAULT '0',
     cd_empresa int(11) NOT NULL DEFAULT '0',
@@ -17,7 +16,7 @@ CREATE TABLE IF NOT EXISTS empdetalhe (
     ds_imgtopo varchar(200) NOT NULL,
     ds_imgfina varchar(200) NOT NULL,
     PRIMARY KEY (cd_codidet)
-)
-
+);
+ALTER TABLE usuario ADD ds_imagens VARCHAR(20) NULL DEFAULT NULL AFTER ds_senhass;
 ";
 ?>

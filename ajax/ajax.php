@@ -135,6 +135,7 @@ if(!empty($acao)){
         
     } elseif($acao == 'salvarEdtUser'){
         
+        
         $formUserAdmin = $_POST['formUserAdmin'];
         
         $insert = "UPDATE usuario SET ";
@@ -189,6 +190,49 @@ if(!empty($acao)){
         
         echo $result;
         exit;
+        
+    } elseif($acao == 'salvaLogoUser'){
+        
+        if(isset($_FILES['ds_imagens'])){
+            if($_FILES['ds_imagens']['error'] == UPLOAD_ERR_OK){
+
+                //Propriedades do arquivo
+                $upName = $_FILES['ds_imagens']['name'];
+                $upType = $_FILES['ds_imagens']['type'];
+                $upSize = $_FILES['ds_imagens']['size'];
+                $upTemp = $_FILES['ds_imagens']['tmp_name'];
+
+                //Pasta para salvar o arquivo
+                $upPasta  = '../img/usuario/'.$_SESSION['cpfUsuario'].'/';
+
+                if(is_dir($upPasta)){
+                    $diretorio = dir($upPasta);
+                    while($arquivo = $diretorio->read()){
+                        if(($arquivo != '.') && ($arquivo != '..')){
+                            if($arquivo == $_SESSION['cpfUsuario']){
+                                unlink($upPasta.$arquivo);
+                            }
+                        }
+                    }
+                    $diretorio->close();
+                } else {
+                    mkdir("../img/usuario/".$_SESSION['cpfUsuario'],0777);
+                }
+
+                //Gerar novo nome para o arquivo
+                $ds_imagens = $_SESSION['cpfUsuario'].'.jpg';
+                
+                include_once('../wideimage/WideImage.php');
+                $image = WideImage::load($upTemp); //Carrega a imagem utilizando a WideImage
+                $image = $image->resize(550,400, 'fill'); //Redimensiona a imagem para ? de largura e ? de altura, mantendo sua proporção no máximo possível
+                //$image = $image->crop('center','center',353,119); //Corta a imagem do centro, forçando sua altura e largura
+
+                $image->saveToFile($upPasta.$ds_imagens); //Salva a imagem
+
+                $updateImg = mysql_query("UPDATE usuario SET ds_imagens = '".$ds_imagens."' WHERE nr_docucpf = '".$_SESSION['cpfUsuario']."'");
+            }
+        }
+        
         
     }
     
