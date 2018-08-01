@@ -1,21 +1,24 @@
 <?php
-
 include_once('../header.php');
 include_once('topo.php');
+$id = $_GET['id'];
+$query1='select * from usuario where cd_usuario='.$id.'';
+$usuario = mysql_query($query1);
+$usuario = mysql_fetch_array($usuario, MYSQLI_ASSOC);
 ?>
 <section class="colon14">
     <div class="singleheader">
         <div class="container">
             <div class="col-md-6">
                 <div class="single-title">
-                    <h3>Nome Instituição</h3>
+                    <h3><?php echo $usuario['nm_usuario'] ?></h3>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="breadcrumb-container">
                     <ul class="breadcrumb">
                         <li><a href="instituicoes.php">Instituições</a></li>
-                        <li class="active">Nome Instituição</li>
+                        <li class="active"><?php echo $usuario['nm_usuario'] ?></li>
                     </ul>
                 </div>
             </div>
@@ -33,47 +36,35 @@ include_once('topo.php');
                     <tr>
                         <th style="text-align:center;">Produto</th>
                         <th style="text-align:center;">Quantidade</th>
+                        <th style="text-align:center;">Status</th>
                     </tr>
-                    <tr>
-                        <td>
-                            Arroz 
-                        </td>
-                        <td  style="text-align:right;">
-                            10 KG 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Arroz 
-                        </td>
-                        <td style="text-align:right;">
-                            10 KG 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Arroz 
-                        </td>
-                        <td style="text-align:right;">
-                            10 KG 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Arroz 
-                        </td>
-                        <td style="text-align:right;">
-                            10 KG 
-                        </td>
-                    </tr>
+                    <?php
+                    $query2 = 'SELECT id_doacoes,cd_empresa,cd_entidad,ds_pedidos,qt_quantid,ds_statuss'
+                              . ' FROM doacoes where cd_entidad='.$id.'';
+                    $resultado=mysql_query($query2);
+                    while ($linha = mysql_fetch_array($resultado, MYSQLI_ASSOC)) {
+                        echo                        
+                            '<tr>
+                                <td>
+                                    '.$linha['ds_pedidos'].'
+                                </td>
+                                <td  style="text-align:center;">
+                                    '.$linha['qt_quantid'].' 
+                                </td>
+                                <td  style="text-align:center;">
+                                    '.$linha['ds_statuss'].'
+                                </td>
+                            </tr>';
+                    }
+                    ?>
                 </table>
             </div>
 
             <div class="col-md-4">
                 <div class="img-responsive">
-                    <img class="logos" src="<?php echo URL_BASE . 'img/logos/logo1.jpg'; ?>" alt="">
+                    <img class="logos" src="<?php echo URL_BASE . 'img/logos/' . $usuario['ds_logoemp']?> " alt="">
                 </div>
-                
+
                 <div class="clearfix"></div>
                 <div class="accordion" id="accordion2">
                     <div class="accordion-group">
@@ -86,9 +77,10 @@ include_once('topo.php');
                             <div class="accordion-inner">
                                 <ul class="portfolio-details">
                                     <li><strong>Responsável :</strong> Joao Pedro</li>
-                                    <li><strong>Telefone :</strong> (14) 3263-1265</li>
-                                    <li><strong>E-mail :</strong>apae@homail.com.br</li>
-                                    <li><strong>Endereço :</strong> R. Armando Paccola, 536 - Grajaú</li>
+                                    <li><strong>Telefone :</strong><?php echo $usuario['nr_telefon'] ?></li>
+                                    <li><strong>E-mail :</strong><?php echo $usuario['ds_emailss'] ?></li>
+                                    <li><strong>Endereço :</strong><?php echo $usuario['ds_enderec'].' - '
+                                                                    .$usuario['nr_enderec']. ' - '.$usuario['ds_bairros'] ?></li>
                                     <li><br></li>
                                     <li><center><strong> Agradecemos a Atenção</strong></center></li>
                                 </ul>
@@ -104,6 +96,5 @@ include_once('topo.php');
 </section>
 
 <?php
-
 include_once('../footer.php');
 ?>

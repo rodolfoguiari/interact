@@ -36,74 +36,34 @@ include_once('topo.php');
 
             <section class="portfolio">
                 <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-6 ">
+                    <?php
+                    $query = 'SELECT DISTINCT(cd_entidad) as cd_entidad, ds_logoemp FROM doacoes inner join usuario on usuario.cd_usuario=doacoes.cd_entidad';
+                    $resultado = mysql_query($query);
+                    $cont = 1;
+
+                    while ($linha = mysql_fetch_array($resultado, MYSQLI_ASSOC)) {
+                        if ($cont == 0) {
+                            echo '<div class="row">';
+                        }
+                        echo'
+                        <div class="col-lg-3 col-md-3 col-sm-6 ">
                         <div class="portfolio-columns"  >
-                            <a href="detalhes.php?id=1">
-                                <img class="logos" src="<?php echo URL_BASE . 'img/logos/logo1.jpg'; ?>" alt="">
+                            <a href="detalhes.php?id=' . $linha['cd_entidad'] . '">
+                                <img class="logos" src="' . URL_BASE . 'img/logos/' . $linha['ds_logoemp'] . '"  alt="">
                                 <div>
                                     <h3><br><br></h3>
                                     <p><i class="icon-zoom-in"></i> Mais Informações</p>
                                 </div>
                             </a>
                         </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-6 web-design development">
-                        <div class="portfolio-columns">
-                            <a href="single-portfolio-1.html">
-                                <img class="logos" src="<?php echo URL_BASE . 'img/logos/logo2.jpg'; ?>" alt="">
-                                <div>
-                                    <h5>I have an Idea</h5>
-                                    <p><i class="icon-folder-open-alt"></i> Illustrator</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-6 web-design development">
-                        <div class="portfolio-columns">
-                            <a href="single-portfolio-1.html">
-                                <img class="logos" src="<?php echo URL_BASE . 'img/logos/logo3.jpg'; ?>" alt="">
-                                <div>
-                                    <h5>Clique para ajudar</h5>
-                                    <p><i class="icon-folder-open-alt"></i> Illustrator</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-6 web-design development">
-                        <div class="portfolio-columns">
-                            <a href="single-portfolio-1.html">
-                                <img class="logos"  src="<?php echo URL_BASE . 'img/logos/logo4.jpg'; ?>" alt="">
-                                <div>
-                                    <h5>I have an Idea</h5>
-                                    <p><i class="icon-folder-open-alt"></i> Illustrator</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-3 col-md-3 col-sm-6 web-design development">
-                        <div class="portfolio-columns">
-                            <a href="single-portfolio-1.html">
-                                <img src="<?php echo URL_BASE . 'img/logos/logo5.jpg'; ?>" alt="">
-                                <div>
-                                    <h5>I have an Idea</h5>
-                                    <p><i class="icon-folder-open-alt"></i> Illustrator</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-3 col-sm-6 web-design development">
-                        <div class="portfolio-columns">
-                            <a href="single-portfolio-1.html">
-                                <img src="<?php echo URL_BASE . 'img/logos/logo1.jpg'; ?>" alt="">
-                                <div>
-                                    <h5>I have an Idea</h5>
-                                    <p><i class="icon-folder-open-alt"></i> Illustrator</p>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+                    </div>';
+                        $cont++;
+                        if ($cont == 3) {
+                            echo '</div>';
+                            $cont = 0;
+                        }
+                    }
+                    ?>
                 </div>
             </section>
 

@@ -13,14 +13,14 @@ include_once('topo.php');
         <div class="container">
             <div class="col-md-6">
                 <div class="single-title">
-                    <h3>SOBRE NÓS TESTE</h3>
+                    <h3>SOBRE NÓS</h3>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="breadcrumb-container">
                     <ul class="breadcrumb">
                         <li><a href="<?php echo URL_BASE; ?>">Início</a></li>
-                        <li class="active">BOBY LINDÃO !</li>
+                        <li class="active">Quem Somos</li>
                     </ul>
                 </div>
             </div>
