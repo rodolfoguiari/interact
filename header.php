@@ -103,4 +103,5 @@ include_once('config/connect_base.php');
         
     </head>
     <body>
+        <input type="hidden" id="resposta" />
         <div id="wrapper">

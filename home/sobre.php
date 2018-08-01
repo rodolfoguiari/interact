@@ -3,9 +3,9 @@ include_once('../header.php');
 include_once('topo.php');
 ?>
 <?php
-    $query='SELECT * FROM empdetalhe LIMIT 1';
-    $resultado = mysql_query($query);
-    $fetch = mysql_fetch_array($resultado);
+$query='SELECT * FROM empdetalhe LIMIT 1';
+$resultado = mysql_query($query);
+$fetch = mysql_fetch_array($resultado);
 ?>
 <section class="colon14">
 
@@ -21,6 +21,7 @@ include_once('topo.php');
                     <ul class="breadcrumb">
                         <li><a href="<?php echo URL_BASE; ?>">Início</a></li>
                         <li class="active">Quem Somos</li>
+                        <li class="active">Sobre</li>
                     </ul>
                 </div>
             </div>

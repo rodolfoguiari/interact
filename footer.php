@@ -116,6 +116,7 @@
                     width:'500',
                     displayTime:time
                 });
+                
             }
             
         </script>

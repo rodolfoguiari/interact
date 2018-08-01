@@ -122,6 +122,118 @@ if(!empty($acao)){
             exit;
         }
         
+    } elseif($acao == 'edtUser'){
+        
+        $user = $_POST['cd_usuario'];
+        
+        include_once('../class/classUsuario.php');
+        $usuario = new classUsuario();
+        $usuario->SelectUsuario($user);
+        
+        echo json_encode($usuario);
+        exit;
+        
+    } elseif($acao == 'salvarEdtUser'){
+        
+        
+        $formUserAdmin = $_POST['formUserAdmin'];
+        
+        $insert = "UPDATE usuario SET ";
+        $value = "";
+        $condicao = " WHERE cd_usuario = ";
+        foreach($formUserAdmin as $idx => $campos){
+            if($idx == 0){
+                $condicao .= $campos['value'];
+            } else {
+                
+                if($campos['name'] == 'dt_nascime' && empty($campos['value'])){
+                    $campos['value'] = '1900-01-01';
+                }
+                
+                $value .= $campos['name'] . " = '" . $campos['value'] . "', ";
+                
+            }
+        }
+        
+        mysql_query("SET AUTOCOMMIT=0");
+        mysql_query("START TRANSACTION");
+        
+        $query = $insert . substr($value,0,-2) . $condicao;
+        $sql = mysql_query($query);
+        
+        if($sql == true){
+            mysql_query("COMMIT");
+            echo 'QUERY_TRUE';
+            exit;
+        } else {
+            mysql_query("ROLLBACK");
+            echo 'QUERY_FALSE';
+            exit;
+        }
+        
+    } elseif($acao == 'listaUser'){
+        
+        $result = "";
+        $sql = mysql_query("SELECT cd_usuario, UPPER(nm_usuario) AS nm_usuario, UPPER(ds_enderec) AS ds_enderec, UPPER(nr_enderec) AS nr_enderec, nr_telefon
+                            FROM usuario ORDER BY nm_usuario ASC");
+        while($qr = mysql_fetch_array($sql)){
+
+            $result .= '<tr>
+                            <td>'.$qr['cd_usuario'].'</td>
+                            <td>'.$qr['nm_usuario'].'</td>
+                            <td>'.$qr['ds_enderec']. ', ' . $qr['nr_enderec'] .'</td>
+                            <td>'.$qr['nr_telefon'].'</td>
+                            <td><button type="button" class="btn btn-sm btn-primary" onclick="edtUser('.$qr['cd_usuario'].')">Editar</button></td>
+                        </tr>';
+
+        }
+        
+        echo $result;
+        exit;
+        
+    } elseif($acao == 'salvaLogoUser'){
+        
+        if(isset($_FILES['ds_imagens'])){
+            if($_FILES['ds_imagens']['error'] == UPLOAD_ERR_OK){
+
+                //Propriedades do arquivo
+                $upName = $_FILES['ds_imagens']['name'];
+                $upType = $_FILES['ds_imagens']['type'];
+                $upSize = $_FILES['ds_imagens']['size'];
+                $upTemp = $_FILES['ds_imagens']['tmp_name'];
+
+                //Pasta para salvar o arquivo
+                $upPasta  = '../img/usuario/'.$_SESSION['cpfUsuario'].'/';
+
+                if(is_dir($upPasta)){
+                    $diretorio = dir($upPasta);
+                    while($arquivo = $diretorio->read()){
+                        if(($arquivo != '.') && ($arquivo != '..')){
+                            if($arquivo == $_SESSION['cpfUsuario']){
+                                unlink($upPasta.$arquivo);
+                            }
+                        }
+                    }
+                    $diretorio->close();
+                } else {
+                    mkdir("../img/usuario/".$_SESSION['cpfUsuario'],0777);
+                }
+
+                //Gerar novo nome para o arquivo
+                $ds_imagens = $_SESSION['cpfUsuario'].'.jpg';
+                
+                include_once('../wideimage/WideImage.php');
+                $image = WideImage::load($upTemp); //Carrega a imagem utilizando a WideImage
+                $image = $image->resize(550,400, 'fill'); //Redimensiona a imagem para ? de largura e ? de altura, mantendo sua proporção no máximo possível
+                //$image = $image->crop('center','center',353,119); //Corta a imagem do centro, forçando sua altura e largura
+
+                $image->saveToFile($upPasta.$ds_imagens); //Salva a imagem
+
+                $updateImg = mysql_query("UPDATE usuario SET ds_imagens = '".$ds_imagens."' WHERE nr_docucpf = '".$_SESSION['cpfUsuario']."'");
+            }
+        }
+        
+        
     }
     
 }

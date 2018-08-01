@@ -35,10 +35,10 @@
                             <a href="<?php echo URL_BASE; ?>home/sobre.php">Sobre Nós</a>
                         </li>
                         <li class="dropdown">
-                            <a href="javascript:void(0);">Instituições</a>
+                            <a href="<?php echo URL_BASE; ?>home/instituicoes.php">Instituições</a>
                         </li>
                         <li class="dropdown">
-                            <a href="javascript:void(0);">Contato</a>
+                            <a href="<?php echo URL_BASE; ?>home/contato.php">Contato</a>
                         </li>
                         <!--<li class="dropdown fhmm-fw"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Mega Menu <b class="caret"></b></a>
                             <ul class="dropdown-menu fullwidth">
