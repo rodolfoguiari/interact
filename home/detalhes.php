@@ -1,24 +1,26 @@
 <?php
 include_once('../header.php');
 include_once('topo.php');
+include_once('../class/classUsuario.php');
+
 $id = $_GET['id'];
-$query1='select * from usuario where cd_usuario='.$id.'';
-$usuario = mysql_query($query1);
-$usuario = mysql_fetch_array($usuario, MYSQLI_ASSOC);
+
+$usuario = new classUsuario();
+$usuario->SelectUsuario($id);
 ?>
 <section class="colon14">
     <div class="singleheader">
         <div class="container">
             <div class="col-md-6">
                 <div class="single-title">
-                    <h3><?php echo $usuario['nm_usuario'] ?></h3>
+                    <h3><?php echo strtoupper($usuario->nm_usuario); ?></h3>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="breadcrumb-container">
                     <ul class="breadcrumb">
                         <li><a href="instituicoes.php">Instituições</a></li>
-                        <li class="active"><?php echo $usuario['nm_usuario'] ?></li>
+                        <li class="active"><?php echo $usuario->nm_usuario; ?></li>
                     </ul>
                 </div>
             </div>
@@ -39,10 +41,8 @@ $usuario = mysql_fetch_array($usuario, MYSQLI_ASSOC);
                         <th style="text-align:center;">Status</th>
                     </tr>
                     <?php
-                    $query2 = 'SELECT id_doacoes,cd_empresa,cd_entidad,ds_pedidos,qt_quantid,ds_statuss'
-                              . ' FROM doacoes where cd_entidad='.$id.'';
-                    $resultado=mysql_query($query2);
-                    while ($linha = mysql_fetch_array($resultado, MYSQLI_ASSOC)) {
+                    $sql = mysql_query("SELECT id_doacoes,cd_empresa,cd_entidad,ds_pedidos,qt_quantid,ds_statuss FROM doacoes WHERE cd_entidad = " . $id);
+                    while($linha = mysql_fetch_array($sql)){
                         echo                        
                             '<tr>
                                 <td>
@@ -62,7 +62,7 @@ $usuario = mysql_fetch_array($usuario, MYSQLI_ASSOC);
 
             <div class="col-md-4">
                 <div class="img-responsive">
-                    <img class="logos" src="<?php echo URL_BASE . 'img/logos/' . $usuario['ds_logoemp']?> " alt="">
+                    <img class="logos" src="<?php echo URL_BASE . 'img/usuario/' . $usuario->nr_docucpf . '/' . $usuario->ds_imagens; ?> " alt="">
                 </div>
 
                 <div class="clearfix"></div>
@@ -76,23 +76,20 @@ $usuario = mysql_fetch_array($usuario, MYSQLI_ASSOC);
                         <div id="collapseTwo" class="accordion-body collapse in">
                             <div class="accordion-inner">
                                 <ul class="portfolio-details">
-                                    <li><strong>Responsável :</strong> Joao Pedro</li>
-                                    <li><strong>Telefone :</strong><?php echo $usuario['nr_telefon'] ?></li>
-                                    <li><strong>E-mail :</strong><?php echo $usuario['ds_emailss'] ?></li>
-                                    <li><strong>Endereço :</strong><?php echo $usuario['ds_enderec'].' - '
-                                                                    .$usuario['nr_enderec']. ' - '.$usuario['ds_bairros'] ?></li>
+                                    <li><strong>Responsável: </strong><?php echo ucwords($usuario->nm_usuario); ?></li>
+                                    <li><strong>Telefone: </strong><?php echo $usuario->nr_telefon; ?></li>
+                                    <li><strong>E-mail: </strong><?php echo $usuario->ds_emailss; ?></li>
+                                    <li><strong>Endereço: </strong><?php echo $usuario->ds_enderec . ' - ' . $usuario->nr_enderec . ' - ' . $usuario->ds_bairros; ?></li>
                                     <li><br></li>
                                     <li><center><strong> Agradecemos a Atenção</strong></center></li>
                                 </ul>
                             </div>
                         </div>
                     </div>                   
-                </div><!-- end accordion -->
-            </div><!-- end col-4 -->
-
-        </div><!-- content -->
-    </div><!-- end general -->
-
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <?php
