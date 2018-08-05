@@ -25,19 +25,19 @@
             <nav class="navbar navbar-default fhmm" role="navigation">
                 <div class="navbar-header">
                     <button type="button" data-toggle="collapse" data-target="#defaultmenu" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-                </div><!-- end navbar-header -->
+                </div>
                 <div id="defaultmenu" class="navbar-collapse collapse container">
                     <ul class="nav navbar-nav">
-                        <li class="active dropdown">
-                            <a href="<?php echo URL_BASE; ?>"><i class="icon-home"></i> Início</a>
+                        <li class="dropdown" id="inicio">
+                            <a href="<?php echo URL_BASE; ?>">Início</a>
                         </li>
-                        <li class="dropdown">
+                        <li class="dropdown" id="sobre">
                             <a href="<?php echo URL_BASE; ?>home/sobre.php">Sobre Nós</a>
                         </li>
-                        <li class="dropdown">
+                        <li class="dropdown" id="instituicoes">
                             <a href="<?php echo URL_BASE; ?>home/instituicoes.php">Instituições</a>
                         </li>
-                        <li class="dropdown">
+                        <li class="dropdown" id="contato">
                             <a href="<?php echo URL_BASE; ?>home/contato.php">Contato</a>
                         </li>
                         <!--<li class="dropdown fhmm-fw"><a href="#" data-toggle="dropdown" class="dropdown-toggle">Mega Menu <b class="caret"></b></a>
@@ -109,3 +109,40 @@
         </div>
     </div>
 </header>
+
+<script type="text/javascript">
+    
+    $(document).ready(function(){
+        
+        var url = window.location.pathname;
+        trataMenuActive(url);
+        
+    });
+    
+    function trataMenuActive(url){
+        
+        if(url == '/interact/' || url == '/interact/index.php'){
+            $("#inicio").addClass('active');
+        } else {
+            
+            $.post("../ajax/ajax.php?acao=trataMenuActive",{url:url},
+            function(data){
+
+                if(data == 'sobre'){
+                    $("#sobre").addClass('active');
+                } else if(data == 'instituicoes'){
+                    $("#instituicoes").addClass('active');
+                } else if(data == 'contato'){
+                    $("#contato").addClass('active');
+                } else {
+                    $("#inicio").addClass('active');
+                }
+
+            }
+            ,"html");
+            
+        }
+        
+    }
+    
+</script>
