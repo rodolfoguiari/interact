@@ -151,8 +151,8 @@
     letter-spacing: 3px !important;
 }
 .logos {
-    width:300px;
-    height:249px;
+    width:300px !important;
+    height:249px !important;
 }
 .logos_grande {
     width:530px;

@@ -234,6 +234,30 @@ if(!empty($acao)){
         }
         
         
+    } elseif($acao == 'enviaContato'){
+        
+        $contato_nome = (!isset($_POST['contato_nome']) || empty($_POST['contato_nome'])) ? "" : removeAcentosBoby($_POST['contato_nome']);
+        $contato_email = (!isset($_POST['contato_email']) || empty($_POST['contato_email'])) ? "" : $_POST['contato_email'];
+        $contato_fone = (!isset($_POST['contato_fone']) || empty($_POST['contato_fone'])) ? "" : $_POST['contato_fone'];
+        $contato_msg = (!isset($_POST['contato_msg']) || empty($_POST['contato_msg'])) ? "" : removeAcentosBoby($_POST['contato_msg']);
+        
+        if(empty($contato_nome) || empty($contato_email) || empty($contato_fone) || empty($contato_msg)){
+            echo 'FIELD_FALSE';
+            exit;
+        } else {
+            
+            $sql = mysql_query("SELECT UPPER(nm_empresa) AS nm_empresa, ds_interne FROM empresa");
+            $qr = mysql_fetch_assoc($sql);
+            $nomeDestinatario = $qr['nm_empresa'];
+            $emailDestinatario = $qr['ds_interne'];
+            
+            $assunto = 'MENSAGEM PELA ABA CONTATO';
+            
+            echo enviaEmail($contato_nome, $contato_email, $nomeDestinatario, $emailDestinatario, CHARSET, $assunto, $contato_msg, 'string');
+            exit;
+            
+        }
+        
     }
     
 }

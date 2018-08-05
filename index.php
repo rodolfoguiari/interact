@@ -325,7 +325,6 @@ include_once('home/topo.php');
                         <header>
                             <h3>Alta Visibilidade</h3>
                         </header>
-                        <a class="readmore" href="javascript:void(0);">Ler Mais</a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6" data-effect="slide-left">
@@ -334,7 +333,6 @@ include_once('home/topo.php');
                         <header>
                             <h3>100% Online</h3>
                         </header>
-                        <a class="readmore" href="javascript:void(0);">Ler Mais</a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6" data-effect="slide-left">
@@ -343,7 +341,6 @@ include_once('home/topo.php');
                         <header>
                             <h3>Fácil Admin</h3>
                         </header>
-                        <a class="readmore" href="javascript:void(0);">Ler Mais</a>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-6" data-effect="slide-left">
@@ -352,7 +349,6 @@ include_once('home/topo.php');
                         <header>
                             <h3>24/7 Suporte</h3>
                         </header>
-                        <a class="readmore" href="javascript:void(0);">Ler Mais</a>
                     </div>
                 </div>
             </div>
@@ -411,13 +407,13 @@ include_once('home/topo.php');
                             </div>
                         </div>
                     </div>
-                </div><!-- end accordion -->
+                </div>
             </div>
         </div>
 
         <div class="message text-center">
             <h2>Veja abaixo algumas <span>instituições</span> parceiras</h2>
-            <p>Faça parte você também. <a href="javascript:void(0);">Clique aqui</a>, faça seu cadastro e anuncie. É simples e rápido!</p>
+            <p>Faça parte você também. <a href="<?php echo URL_BASE . 'home/login.php'; ?>">Clique aqui</a>, faça seu cadastro e anuncie. É simples e rápido!</p>
         </div>
 
         <ul id="og-grid" class="og-grid">
@@ -538,44 +534,35 @@ include_once('home/topo.php');
     <div class="container">
         <div class="col-lg-2 col-md-2 col-sm-2" data-effect="pop">
             <div class="client">
-                <a data-toggle="tooltip" data-placement="top" title="Lorem Ipsum has been the industry's standard dummy text ever since the..." href="javascript:void(0);">
+                <!--<a data-toggle="tooltip" data-placement="top" title="Lorem Ipsum has been the industry's standard dummy text ever since the..." href="javascript:void(0);">
                     <img src="<?php echo URL_BASE; ?>demos/01_client.png" alt="">
-                </a>
+                </a>-->
+                <img src="<?php echo URL_BASE; ?>demos/01_client.png" alt="">
             </div>
         </div>
         <div class="col-lg-2 col-md-2 col-sm-2" data-effect="pop">
             <div class="client">
-                <a data-toggle="tooltip" data-placement="top" title="Lorem Ipsum has been the industry's standard dummy text ever since the..." href="javascript:void(0);">
-                    <img src="<?php echo URL_BASE; ?>demos/02_client.png" alt="">
-                </a>
+                <img src="<?php echo URL_BASE; ?>demos/02_client.png" alt="">
             </div>
         </div>
         <div class="col-lg-2 col-md-2 col-sm-2" data-effect="pop">
             <div class="client">
-                <a data-toggle="tooltip" data-placement="top" title="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the..." href="javascript:void(0);">
-                    <img src="<?php echo URL_BASE; ?>demos/03_client.png" alt="">
-                </a>
+                <img src="<?php echo URL_BASE; ?>demos/03_client.png" alt="">
             </div>
         </div>
         <div class="col-lg-2 col-md-2 col-sm-2" data-effect="pop">
             <div class="client">
-                <a data-toggle="tooltip" data-placement="top" title="Lorem Ipsum has been the industry's standard dummy text ever since the..." href="javascript:void(0);">
-                    <img src="<?php echo URL_BASE; ?>demos/04_client.png" alt="">
-                </a>
+                <img src="<?php echo URL_BASE; ?>demos/04_client.png" alt="">
             </div>
         </div>
         <div class="col-lg-2 col-md-2 col-sm-2" data-effect="pop">
             <div class="client">
-                <a data-toggle="tooltip" data-placement="top" title="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the..." href="javascript:void(0);">
-                    <img src="<?php echo URL_BASE; ?>demos/05_client.png" alt="">
-                </a>
+                <img src="<?php echo URL_BASE; ?>demos/05_client.png" alt="">
             </div>
         </div>
         <div class="col-lg-2 col-md-2 col-sm-2" data-effect="pop">
             <div class="client">
-                <a data-toggle="tooltip" data-placement="top" title="Lorem Ipsum has been the industry's standard dummy text ever since the..." href="javascript:void(0);">
-                    <img src="<?php echo URL_BASE; ?>demos/06_client.png" alt="">
-                </a>
+                <img src="<?php echo URL_BASE; ?>demos/06_client.png" alt="">
             </div>
         </div>
     </div>

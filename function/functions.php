@@ -55,4 +55,57 @@ function removeAcentosBoby($string) {
 
     return strtoupper(strtolower($string));
 }
+
+function enviaEmail($nomeRemetente, $emailRemetente, $nomeDestinatario, $emailDestinatario, $charset, $assunto, $mensagem, $tipoRetorno = 'alert', $anexo = '', $redireciona = '#', $msgSucesso = 'EMAIL ENVIADO COM SUCESSO!', $msgErro = 'FALHA AO ENVIAR O EMAIL. TENTE NOVAMENTE!'){
+
+    include_once('../phpmailer/class.phpmailer.php');
+
+    // Inicia a classe PHPMailer
+    $mail = new PHPMailer();
+    $mail->IsSMTP(); // Define que a mensagem será SMTP
+    // Define o remetente
+    $mail->From = $emailRemetente;
+    $mail->FromName = $nomeRemetente;
+
+    // Define os destinatário(s)
+    $mail->AddAddress($emailDestinatario, $nomeDestinatario);
+
+    // Define os dados técnicos da Mensagem
+    $mail->IsHTML(true);
+    $mail->CharSet = $charset;
+
+    // Define a mensagem (Texto e Assunto)
+    $mail->Subject = $assunto;
+    $mail->Body = $mensagem;
+
+    //Anexo do email
+    if(isset($anexo) && !empty($anexo) && $anexo == true){
+        foreach ($anexo as $arq) {
+            $mail->AddAttachment($arq);
+        }
+    }
+
+    // Envia o e-mail
+    $enviar = $mail->Send();
+
+    // Limpa os destinatários
+    $mail->ClearAllRecipients();
+
+    // Exibe uma mensagem de resultado
+    if ($enviar) {
+        if ($tipoRetorno == 'alert') {
+            $result = '<script type="text/javascript">alert(\'' . $msgSucesso . '\');window.location = \'' . $redireciona . '\';</script>';
+        } else {
+            $result = $msgSucesso;
+        }
+    } else {
+        if ($tipoRetorno == 'alert') {
+            $result = '<script type="text/javascript">alert(\'' . $msgErro . '\');window.location = \'' . $redireciona . '\';</script>';
+        } else {
+            $result = $msgErro;
+        }
+    }
+
+    return $result;
+}
 ?>

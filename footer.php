@@ -3,10 +3,10 @@
                     <div class="col-lg-4 col-md-4 col-sm-6">
                         <div class="widget">
                             <h2 class="general-title">
-                                <span>Sobre INTERACT</span>
+                                <span>Sobre o INTERACT</span>
                             </h2>
                             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p> 
-                            <a class="btn btn-primary btn-sm" href="javascript:void(0);">Ler Mais</a>
+                            <a class="btn btn-primary btn-sm" href="<?php echo URL_BASE . 'home/sobre.php' ?>">Ler Mais</a>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-4 col-sm-6">
@@ -60,12 +60,22 @@
                             <h2 class="general-title">
                                 <span>Contato</span>
                             </h2>
-                            <!--<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac.</p>-->
                             <ul class="contact-details">
-                                <li><i class="icon-home"></i> Avenida Padre Salústio Rodrigues Machado, 1000 / Lençóis Paulista</li>
-                                <li><i class="icon-mobile-phone"></i> (14) 3263 - 0000</li>
-                                <li><i class="icon-envelope-alt"></i> contato@interact.com.br</li>
-                                <li><i class="icon-map-marker"></i> <a href="javascript:void(0);" title="Visualizar diretamente no Google">Google Map</a></li>  
+                                <?php
+                                $sql = mysql_query("SELECT empresa.ds_enderec, empresa.nr_enderec, cidade.nm_cidade, empresa.nr_telefo1, empresa.ds_interne FROM empresa
+                                                    INNER JOIN cidade ON (empresa.cd_cidades = cidade.cd_cidade)");
+                                $qr = mysql_fetch_assoc($sql);
+                                $ds_enderec = $qr['ds_enderec'];
+                                $nr_enderec = $qr['nr_enderec'];
+                                $nm_cidades = $qr['nm_cidade'];
+                                $nr_telefo1 = $qr['nr_telefo1'];
+                                $ds_interne = $qr['ds_interne'];
+                                $url_google = 'https://www.google.com.br/maps/preview?q=' . $ds_enderec . ', ' . $nr_enderec . ', ' . $nm_cidades;
+                                ?>
+                                <li><i class="icon-home"></i> <?php echo $ds_enderec . ', ' . $nr_enderec . ' / ' . $nm_cidades; ?></li>
+                                <li><i class="icon-mobile-phone"></i> <?php echo $nr_telefo1; ?></li>
+                                <li><i class="icon-envelope-alt"></i> <?php echo $ds_interne; ?></li>
+                                <li><i class="icon-map-marker"></i> <a href="<?php echo $url_google; ?>" title="Visualizar diretamente no Google" target="_blank">Google Map</a></li>  
                             </ul>
                         </div>
                     </div>
@@ -82,8 +92,8 @@
                     <div class="col-lg-6 col-md-6 col-sm-6">
                         <nav>
                             <ul class="footer-menu">
-                                <li><a href="javascript:void(0);" title="#">Início</a></li>
-                                <li><a href="javascript:void(0);" title="#">Contato</a></li>
+                                <li><a href="<?php echo URL_BASE; ?>" title="#">Início</a></li>
+                                <li><a href="<?php echo URL_BASE.'home/contato.php'; ?>" title="#">Contato</a></li>
                             </ul>
                         </nav>
                     </div>

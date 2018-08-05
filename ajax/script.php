@@ -18,5 +18,21 @@ CREATE TABLE IF NOT EXISTS empdetalhe (
     PRIMARY KEY (cd_codidet)
 );
 ALTER TABLE usuario ADD ds_imagens VARCHAR(20) NULL DEFAULT NULL AFTER ds_senhass;
+CREATE TABLE IF NOT EXISTS doacoes (
+    id_doacoes int(11) NOT NULL AUTO_INCREMENT,
+    cd_empresa int(11) NOT NULL,
+    cd_entidad int(11) NOT NULL,
+    ds_pedidos varchar(900) NOT NULL,
+    qt_quantid float NOT NULL,
+    ds_statuss varchar(200) NOT NULL,
+    dt_inclusa date NOT NULL,
+    hr_inclusa time NOT NULL,
+    cd_usuario int(11) NOT NULL,
+    dt_alterac date DEFAULT NULL,
+    hr_alterac time DEFAULT NULL,
+    cd_usualte int(11) DEFAULT NULL,
+    PRIMARY KEY (id_doacoes),
+    UNIQUE KEY id_doacoes (id_doacoes)
+);
 ";
 ?>
