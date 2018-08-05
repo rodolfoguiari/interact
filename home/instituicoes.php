@@ -22,7 +22,6 @@ include_once('topo.php');
         <div class="shadow"></div>
     </div>
 
-    <!-- START CONTENT AND SIDEBAR -->
     <div class="container general">
         <div id="content" class="single col-lg-12 col-md-12 col-sm-12">
 
@@ -35,26 +34,33 @@ include_once('topo.php');
             <section class="portfolio">
                 <div class="row">
                     <?php
-                    $query = 'SELECT DISTINCT(cd_entidad) as cd_entidad, ds_logoemp FROM doacoes inner join usuario on usuario.cd_usuario=doacoes.cd_entidad';
+                    $query = 'SELECT DISTINCT(doacoes.cd_entidad) AS cd_entidad, usuario.ds_imagens FROM doacoes
+                              INNER JOIN usuario ON usuario.cd_usuario = doacoes.cd_entidad';
                     $resultado = mysql_query($query);
                     $cont = 1;
 
-                    while ($linha = mysql_fetch_array($resultado, MYSQLI_ASSOC)) {
+                    while ($linha = mysql_fetch_array($resultado)) {
+                        
+                        $img = $linha['ds_imagens'];
+                        
+                        $pasta = explode('.',$img)[0];
+                        
                         if ($cont == 0) {
                             echo '<div class="row">';
                         }
-                        echo'
-                        <div class="col-lg-3 col-md-3 col-sm-6 ">
-                        <div class="portfolio-columns"  >
-                            <a href="detalhes.php?id=' . $linha['cd_entidad'] . '">
-                                <img class="logos" src="' . URL_BASE . 'img/logos/' . $linha['ds_logoemp'] . '"  alt="">
-                                <div>
-                                    <h3><br><br></h3>
-                                    <p><i class="icon-zoom-in"></i> Mais Informações</p>
+                        
+                        echo '<div class="col-lg-3 col-md-3 col-sm-6 ">
+                                <div class="portfolio-columns" >
+                                    <a href="detalhes.php?id=' . $linha['cd_entidad'] . '">
+                                        <img class="logos" src="' . URL_BASE . 'img/usuario/' . $pasta . '/' . $img . '"  alt="">
+                                        <div>
+                                            <h3><br><br></h3>
+                                            <p><i class="icon-zoom-in"></i> Mais Informações</p>
+                                        </div>
+                                    </a>
                                 </div>
-                            </a>
-                        </div>
-                    </div>';
+                              </div>';
+                        
                         $cont++;
                         if ($cont == 3) {
                             echo '</div>';
@@ -67,8 +73,8 @@ include_once('topo.php');
 
             <div class="clearfix"></div>
 
-        </div><!-- end content -->
-    </div><!-- end container -->
+        </div>
+    </div>
 </section>
 
 <?php
