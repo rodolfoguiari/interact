@@ -93,7 +93,10 @@
                         <nav>
                             <ul class="footer-menu">
                                 <li><a href="<?php echo URL_BASE; ?>" title="#">Início</a></li>
+                                <li><a href="<?php echo URL_BASE.'home/sobre.php'; ?>" title="#">Sobre Nós</a></li>
+                                <li><a href="<?php echo URL_BASE.'home/instituicoes.php'; ?>" title="#">Instituições</a></li>
                                 <li><a href="<?php echo URL_BASE.'home/contato.php'; ?>" title="#">Contato</a></li>
+                                <li><a href="<?php echo URL_BASE.'home/login.php'; ?>" title="#">Área Restrita</a></li>
                             </ul>
                         </nav>
                     </div>

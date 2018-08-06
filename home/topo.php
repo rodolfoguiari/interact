@@ -1,7 +1,13 @@
 <div class="topbar">
     <div class="container">
+        <?php
+        $sql = mysql_query("SELECT nr_telefo1, ds_interne FROM empresa");
+        $qr = mysql_fetch_assoc($sql);
+        $telTopo = $qr['nr_telefo1'];
+        $emaTopo = $qr['ds_interne'];
+        ?>
         <div class="col-lg-6 col-md-6 col-sm-6">
-            <p class="tagline">Nosso Tel.: (14) 3263 - 0000 // Email: contato@interact.com.br</p>
+            <p class="tagline"><?php echo 'Nosso Tel.: ' . $telTopo . ' // Email: ' . $emaTopo; ?></p>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6">
             <ul class="dm-social">

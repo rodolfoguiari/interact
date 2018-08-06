@@ -25,9 +25,8 @@
                 <ul class="dm-sidebar-nav">
                     <li><a href="javascript:void(0);">Slide Início</a></li>
                     <li><a href="javascript:void(0);">Sobre Nós</a></li>
-                    <li><a href="javascript:void(0);">Instituições</a></li>
-                    <li><a href="javascript:void(0);">Pedidos</a></li>
-                    <li><a href="usuarios.php">Usuários</a></li>
+                    <li><a href="pedidos.php">Pedidos</a></li>
+                    <li><a href="usuarios.php">Usuários / Instituições</a></li>
                     <li><a href="javascript:void(0);" onclick="sairAdmin()">Sair</a></li>
                 </ul>
             </div>

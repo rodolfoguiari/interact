@@ -13,7 +13,7 @@ $usuario->SelectUsuario($id);
         <div class="container">
             <div class="col-md-6">
                 <div class="single-title">
-                    <h3><?php echo strtoupper($usuario->nm_usuario); ?></h3>
+                    <h3><?php echo ucwords($usuario->nm_usuario); ?></h3>
                 </div>
             </div>
             <div class="col-md-6">
@@ -41,7 +41,7 @@ $usuario->SelectUsuario($id);
                         <th style="text-align:center;">Status</th>
                     </tr>
                     <?php
-                    $sql = mysql_query("SELECT id_doacoes,cd_empresa,cd_entidad,ds_pedidos,qt_quantid,ds_statuss FROM doacoes WHERE cd_entidad = " . $id);
+                    $sql = mysql_query("SELECT id_doacoes,cd_empresa,cd_entidad,UPPER(ds_pedidos) AS ds_pedidos,qt_quantid,ds_statuss FROM doacoes WHERE cd_entidad = " . $id);
                     while($linha = mysql_fetch_array($sql)){
                         echo                        
                             '<tr>
@@ -62,10 +62,9 @@ $usuario->SelectUsuario($id);
 
             <div class="col-md-4">
                 <div class="img-responsive">
-                    <img class="logos" src="<?php echo URL_BASE . 'img/usuario/' . $usuario->nr_docucpf . '/' . $usuario->ds_imagens; ?> " alt="">
+                    <img src="<?php echo URL_BASE . 'img/usuario/' . $usuario->nr_docucpf . '/' . $usuario->ds_imagens; ?> " alt="">
                 </div>
-
-                <div class="clearfix"></div>
+                <hr>
                 <div class="accordion" id="accordion2">
                     <div class="accordion-group">
                         <div class="accordion-heading">

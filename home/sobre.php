@@ -13,7 +13,7 @@ $fetch = mysql_fetch_array($resultado);
         <div class="container">
             <div class="col-md-6">
                 <div class="single-title">
-                    <h3>SOBRE NÓS</h3>
+                    <h3>Sobre Nós</h3>
                 </div>
             </div>
             <div class="col-md-6">

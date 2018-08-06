@@ -93,11 +93,12 @@ if(!empty($acao)){
         
         if(!empty($nr_cnpjcpf_login) && !empty($ds_senhass_login)){
             
+            unset($_SESSION['codUsuario']);
             unset($_SESSION['nomUsuario']);
             unset($_SESSION['cpfUsuario']);
             unset($_SESSION['aceUsuario']);
 
-            $sql = mysql_query("SELECT UPPER(nm_usuario) AS nm_usuario, nr_docucpf, cd_acessos FROM usuario
+            $sql = mysql_query("SELECT cd_usuario, UPPER(nm_usuario) AS nm_usuario, nr_docucpf, cd_acessos FROM usuario
                                 WHERE nr_docucpf = '".$nr_cnpjcpf_login."' AND ds_senhass = '".$ds_senhass_login."'");
             $totLine = mysql_num_rows($sql);
 
@@ -105,6 +106,7 @@ if(!empty($acao)){
                 
                 $qr = mysql_fetch_assoc($sql);
                 
+                $_SESSION['codUsuario'] = $qr['cd_usuario'];
                 $_SESSION['nomUsuario'] = $qr['nm_usuario'];
                 $_SESSION['cpfUsuario'] = $qr['nr_docucpf'];
                 $_SESSION['aceUsuario'] = $qr['cd_acessos'];
@@ -174,8 +176,15 @@ if(!empty($acao)){
     } elseif($acao == 'listaUser'){
         
         $result = "";
-        $sql = mysql_query("SELECT cd_usuario, UPPER(nm_usuario) AS nm_usuario, UPPER(ds_enderec) AS ds_enderec, UPPER(nr_enderec) AS nr_enderec, nr_telefon
-                            FROM usuario ORDER BY nm_usuario ASC");
+        
+        $query = "SELECT cd_usuario, UPPER(nm_usuario) AS nm_usuario, UPPER(ds_enderec) AS ds_enderec, UPPER(nr_enderec) AS nr_enderec, nr_telefon
+                  FROM usuario WHERE 1 = 1";
+        
+        if($_SESSION['aceUsuario'] < 3){
+            $query .= " AND nr_docucpf = '".$_SESSION['cpfUsuario']."'";
+        }
+        
+        $sql = mysql_query($query . " ORDER BY nm_usuario ASC");
         while($qr = mysql_fetch_array($sql)){
 
             $result .= '<tr>
@@ -184,6 +193,43 @@ if(!empty($acao)){
                             <td>'.$qr['ds_enderec']. ', ' . $qr['nr_enderec'] .'</td>
                             <td>'.$qr['nr_telefon'].'</td>
                             <td><button type="button" class="btn btn-sm btn-primary" onclick="edtUser('.$qr['cd_usuario'].')">Editar</button></td>
+                        </tr>';
+
+        }
+        
+        echo $result;
+        exit;
+        
+    } elseif($acao == 'listaPedido'){
+        
+        $cd_userPedido = (isset($_POST['cd_userPedido']) && !empty($_POST['cd_userPedido'])) ? $_POST['cd_userPedido'] : 0;
+        
+        $result = "";
+        
+        $query = "SELECT doacoes.id_doacoes, UPPER(doacoes.ds_pedidos) AS ds_pedidos, doacoes.qt_quantid, unidade_medida.ds_unidade, UPPER(usuario.nm_usuario) AS nm_usuario
+                  FROM doacoes
+                  INNER JOIN unidade_medida ON (doacoes.cd_unidade = unidade_medida.cd_unidade)
+                  INNER JOIN usuario ON (doacoes.cd_entidad = usuario.cd_usuario)
+                  WHERE 1 = 1";
+        
+        if($_SESSION['aceUsuario'] < 3){
+            $query .= " AND doacoes.cd_entidad = '".$_SESSION['codUsuario']."'";
+        }
+        
+        if($cd_userPedido > 0){
+            $query .= " AND doacoes.cd_entidad = '".$cd_userPedido."'";
+        }
+        
+        $sql = mysql_query($query . " ORDER BY doacoes.ds_pedidos ASC");
+        while($qr = mysql_fetch_array($sql)){
+
+            $result .= '<tr>
+                            <td>'.$qr['id_doacoes'].'</td>
+                            <td>'.$qr['ds_pedidos'].'</td>
+                            <td>'.$qr['qt_quantid'].'</td>
+                            <td>'.$qr['ds_unidade'].'</td>
+                            <td>'.$qr['nm_usuario'].'</td>
+                            <td><button type="button" class="btn btn-sm btn-danger" onclick="delPedido('.$qr['id_doacoes'].')">Excluir</button></td>
                         </tr>';
 
         }
@@ -255,6 +301,77 @@ if(!empty($acao)){
             
             echo enviaEmail($contato_nome, $contato_email, $nomeDestinatario, $emailDestinatario, CHARSET, $assunto, $contato_msg, 'string');
             exit;
+            
+        }
+        
+    } elseif($acao == 'trataMenuActive'){
+        
+        $url = (isset($_POST['url']) && !empty($_POST['url'])) ? $_POST['url'] : "";
+
+        if(empty($url)){
+            echo 'inicio';
+            exit;
+        } else {
+            
+            $a = explode('/', $url);
+            $b = end($a);
+            $c = explode('.', $b);
+
+            $arquivoURL = $c[0];
+
+            echo $arquivoURL;
+            exit;
+            
+        }
+        
+    } elseif($acao == 'delPedido'){
+        
+        $id = $_POST['id'];
+        
+        mysql_query("SET AUTOCOMMIT=0");
+        mysql_query("START TRANSACTION");
+        
+        $delete = mysql_query("DELETE FROM doacoes WHERE id_doacoes = '".$id."'");
+        
+        if($delete == true){
+            mysql_query("COMMIT");
+            echo 'QUERY_TRUE';
+            exit;
+        } else {
+            mysql_query("ROLLBACK");
+            echo 'QUERY_FALSE';
+            exit;
+        }
+        
+    } elseif($acao == 'salvarNewPedido'){
+        
+        $ds_pedidos = (isset($_POST['ds_pedidos']) && !empty($_POST['ds_pedidos'])) ? removeAcentosBoby($_POST['ds_pedidos']) : "";
+        $qt_quantid = (isset($_POST['qt_quantid']) && !empty($_POST['qt_quantid'])) ? $_POST['qt_quantid'] : "";
+        $cd_unidade = $_POST['cd_unidade'];
+        $cd_entidad = $_POST['cd_entidad'];
+        
+        if(empty($ds_pedidos) || empty($qt_quantid)){
+            echo 'FIELD_FALSE';
+            exit;
+        } else {
+            
+            mysql_query("SET AUTOCOMMIT=0");
+            mysql_query("START TRANSACTION");
+            
+            $query = "INSERT INTO doacoes (cd_empresa, cd_entidad, ds_pedidos, qt_quantid, cd_unidade, ds_statuss, dt_inclusa, hr_inclusa, cd_usuario) VALUES 
+                      ('1','".$cd_entidad."','".$ds_pedidos."','".$qt_quantid."','".$cd_unidade."','Aberto','".DtAtual()."','".HrAtual()."','".$_SESSION['codUsuario']."')";
+            
+            $insert = mysql_query($query);
+            
+            if($insert == true){
+                mysql_query("COMMIT");
+                echo 'QUERY_TRUE';
+                exit;
+            } else {
+                mysql_query("ROLLBACK");
+                echo 'QUERY_FALSE';
+                exit;
+            }
             
         }
         
