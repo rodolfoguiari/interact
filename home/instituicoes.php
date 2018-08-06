@@ -34,16 +34,23 @@ include_once('topo.php');
             <section class="portfolio">
                 <div class="row">
                     <?php
-                    $query = 'SELECT DISTINCT(doacoes.cd_entidad) AS cd_entidad, usuario.ds_imagens FROM doacoes
-                              INNER JOIN usuario ON usuario.cd_usuario = doacoes.cd_entidad';
+                    $query = "SELECT DISTINCT(doacoes.cd_entidad) AS cd_entidad, COALESCE(usuario.ds_imagens,'') AS ds_imagens FROM doacoes
+                              INNER JOIN usuario ON usuario.cd_usuario = doacoes.cd_entidad";
                     $resultado = mysql_query($query);
                     $cont = 1;
 
                     while ($linha = mysql_fetch_array($resultado)) {
                         
-                        $img = $linha['ds_imagens'];
-                        
-                        $pasta = explode('.',$img)[0];
+                        if(empty($linha['ds_imagens'])){
+                            
+                            $pasta = "sem_imagem.jpg";
+                            
+                        } else {
+                            
+                            $img = $linha['ds_imagens'];
+                            $pasta = explode('.',$img)[0] . '/' . $img;
+                            
+                        }
                         
                         if ($cont == 0) {
                             echo '<div class="row">';
@@ -52,7 +59,7 @@ include_once('topo.php');
                         echo '<div class="col-lg-3 col-md-3 col-sm-6 ">
                                 <div class="portfolio-columns" >
                                     <a href="detalhes.php?id=' . $linha['cd_entidad'] . '">
-                                        <img class="logos" src="' . URL_BASE . 'img/usuario/' . $pasta . '/' . $img . '"  alt="">
+                                        <img class="logos" src="' . URL_BASE . 'img/usuario/' . $pasta . '"  alt="">
                                         <div>
                                             <h3><br><br></h3>
                                             <p><i class="icon-zoom-in"></i> Mais Informações</p>

@@ -62,7 +62,14 @@ $usuario->SelectUsuario($id);
 
             <div class="col-md-4">
                 <div class="img-responsive">
-                    <img src="<?php echo URL_BASE . 'img/usuario/' . $usuario->nr_docucpf . '/' . $usuario->ds_imagens; ?> " alt="">
+                    <?php
+                    if($usuario->ds_imagens == false){
+                        $img = "sem_imagem.jpg";
+                    } else {
+                        $img = $usuario->nr_docucpf . '/' . $usuario->ds_imagens;
+                    }
+                    ?>
+                    <img src="<?php echo URL_BASE . 'img/usuario/' . $img; ?> " alt="">
                 </div>
                 <hr>
                 <div class="accordion" id="accordion2">
