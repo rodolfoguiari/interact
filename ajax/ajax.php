@@ -375,7 +375,166 @@ if(!empty($acao)){
             
         }
         
+    } elseif ($acao == 'listaCuri') {
+        $query="SELECT ds_curios1, ds_curios2,ds_curios3,ds_curios4,nr_curios1,nr_curios2,nr_curios3,nr_curios4 FROM empdetalhe";
+        $resultado1=mysql_query($query);
+        $resultado=mysql_fetch_assoc($resultado1);        
+        $result .= 
+            '<tr>
+                <td>' . $resultado['nr_curios1'] . '</td>
+                <td>' . $resultado['ds_curios1'] . '</td>
+                 <td style="text-align: right;"><button type="button" class="btn btn-sm btn-primary" onclick="edtCurios(\'ds_curios1\')">Editar</button></td>
+            </tr>
+            <tr>
+                <td>' . $resultado['nr_curios2'] . '</td>
+                <td>' . $resultado['ds_curios2'] . '</td>
+                 <td style="text-align: right;"><button type="button" class="btn btn-sm btn-primary" onclick="edtCurios(\'ds_curios2\')">Editar</button></td>
+            </tr>
+            <tr>
+                <td>' . $resultado['nr_curios3'] . '</td>
+                <td>' . $resultado['ds_curios3'] . '</td>
+                 <td style="text-align: right;"><button type="button" class="btn btn-sm btn-primary" onclick="edtCurios(\'ds_curios3\')">Editar</button></td>
+            </tr>
+            <tr>
+                <td>' . $resultado['nr_curios4'] . '</td>
+                <td>' . $resultado['ds_curios4'] . '</td>
+                <td style="text-align: right;"><button type="button" class="btn btn-sm btn-primary" onclick="edtCurios(\'ds_curios4\')">Editar</button></td>
+            </tr>';                    
+        echo $result;
+        exit;
+    }elseif($acao=='carregaSobre'){
+        $query1="SELECT ds_txttopo, ds_txtfina FROM empdetalhe";
+        $query=mysql_query($query1);
+        $resultado=mysql_fetch_assoc($query);
+        echo json_encode($resultado);
+        exit;
+        
+    } elseif($acao == 'salvaImg1'){
+        
+        if(isset($_FILES['foto1'])){
+            if($_FILES['foto1']['error'] == UPLOAD_ERR_OK){
+
+                //Propriedades do arquivo
+                $upName = $_FILES['foto1']['name'];
+                $upType = $_FILES['foto1']['type'];
+                $upSize = $_FILES['foto1']['size'];
+                $upTemp = $_FILES['foto1']['tmp_name'];
+
+                //Pasta para salvar o arquivo
+                $upPasta  = '../img/';
+
+                //Gerar novo nome para o arquivo
+                $foto1   = 'quem_topo.jpg';
+                
+                include_once('../wideimage/WideImage.php');
+                $image = WideImage::load($upTemp); //Carrega a imagem utilizando a WideImage
+                $image = $image->resize(1000,550, 'fill'); //Redimensiona a imagem para ? de largura e ? de altura, mantendo sua proporção no máximo possível
+                //$image = $image->crop('center','center',353,119); //Corta a imagem do centro, forçando sua altura e largura
+
+                $image->saveToFile($upPasta.$foto1); //Salva a imagem
+
+                $updateImg = mysql_query("UPDATE empdetalhe SET ds_imgtopo ='quem_topo.jpg'");
+            }
+        }elseif(isset($_FILES['foto2'])){
+            if($_FILES['foto2']['error'] == UPLOAD_ERR_OK){
+
+                //Propriedades do arquivo
+                $upName = $_FILES['foto2']['name'];
+                $upType = $_FILES['foto2']['type'];
+                $upSize = $_FILES['foto2']['size'];
+                $upTemp = $_FILES['foto2']['tmp_name'];
+
+                //Pasta para salvar o arquivo
+                $upPasta  = '../img/';
+
+                //Gerar novo nome para o arquivo
+                $foto2   = 'quem_meio.jpg';
+                
+                include_once('../wideimage/WideImage.php');
+                $image = WideImage::load($upTemp); //Carrega a imagem utilizando a WideImage
+                $image = $image->resize(1000,550, 'fill'); //Redimensiona a imagem para ? de largura e ? de altura, mantendo sua proporção no máximo possível
+                //$image = $image->crop('center','center',353,119); //Corta a imagem do centro, forçando sua altura e largura
+
+                $image->saveToFile($upPasta.$foto2); //Salva a imagem
+
+                $updateImg = mysql_query("UPDATE empdetalhe SET ds_imgfina ='quem_meio.jpg'");
+            }
+        }
+        
+        
+    }elseif ($acao=='salvarSobre') {
+         $ds_txttopo = $_POST['ds_txttopo'];
+         $ds_txtfina = $_POST['ds_txtfina'];
+        if(empty($ds_txttopo) || empty($ds_txtfina)){
+            echo 'FIELD_FALSE';
+            exit;
+        } else {          
+            mysql_query("SET AUTOCOMMIT=0");
+            mysql_query("START TRANSACTION");            
+            $query = "UPDATE empdetalhe set ds_txttopo='".$ds_txttopo."', ds_txtfina='".$ds_txtfina."' where cd_empresa=1";
+            
+            $update = mysql_query($query);
+            
+            if($update == true){
+                mysql_query("COMMIT");
+                echo 'QUERY_TRUE';
+                exit;
+            } else {
+                mysql_query("ROLLBACK");
+                echo 'QUERY_FALSE';
+                exit;
+            }
+            
+        }
+        
+    }elseif($acao=='edtCurios'){
+        $campo=$_POST['campo'];
+        if($campo=='ds_curios1'){
+            $query1="SELECT ds_curios1 as ds_curios, nr_curios1 as nr_curios FROM empdetalhe";
+        }elseif ($campo=='ds_curios2') {
+             $query1="SELECT ds_curios2 as ds_curios, nr_curios2 as nr_curios FROM empdetalhe";   
+        }elseif ($campo=='ds_curios3') {
+             $query1="SELECT ds_curios3 as ds_curios, nr_curios3 as nr_curios  FROM empdetalhe"; 
+        }elseif ($campo=='ds_curios4') {
+             $query1="SELECT ds_curios4 as ds_curios, nr_curios4 as nr_curios  FROM empdetalhe";   
+        }
+        $query=mysql_query($query1);
+        $resultado=mysql_fetch_assoc($query);
+        echo json_encode($resultado);
+        exit;
+        
+    }elseif ($acao=='salvarCurios') {
+         $ds_texto= $_POST['ds_curios'];
+         $vr_valor= $_POST['vr_curios'];
+         $campo=$_POST['campo'];
+        if(empty($ds_texto) || empty($vr_valor)){
+            echo 'FIELD_FALSE';
+            exit;
+        } else {
+            mysql_query("SET AUTOCOMMIT=0");
+            mysql_query("START TRANSACTION");
+            if ($campo == 'ds_curios1') {
+                $query1 = "UPDATE empdetalhe set ds_curios1='".$ds_texto."', nr_curios1=".$vr_valor;
+            } elseif ($campo == 'ds_curios2') {
+                $query1 = "UPDATE empdetalhe set ds_curios2='".$ds_texto."', nr_curios2=".$vr_valor;
+            } elseif ($campo == 'ds_curios3') {
+                $query1 = "UPDATE empdetalhe set ds_curios3='".$ds_texto."', nr_curios3=".$vr_valor;
+            } elseif ($campo == 'ds_curios4') {
+                $query1 = "UPDATE empdetalhe set ds_curios4='".$ds_texto."', nr_curios4=".$vr_valor;
+            }
+
+            $update = mysql_query($query1);
+
+            if ($update == true) {
+                mysql_query("COMMIT");
+                echo 'QUERY_TRUE';
+                exit;
+            } else {
+                mysql_query("ROLLBACK");
+                echo 'QUERY_FALSE';
+                exit;
+            }
+        }
     }
-    
 }
 ?>

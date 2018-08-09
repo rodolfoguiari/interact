@@ -29,31 +29,31 @@ $fetch = mysql_fetch_array($resultado);
         <div class="shadow"></div>
     </div>
 
-    <div class="container general">
+    <div class="container general ">
 
         <div id="content" class="single col-md-12">
-            <div class="image-container img-responsive">
+            <div class="image-container img-responsive" data-effect="slide-bottom">
                 <img src="<?php echo URL_BASE.'img/'.$fetch['ds_imgtopo'];?>" alt="">
             </div>
-            <div class="text-left" >
+            <div class="text-left" data-effect="slide-bottom" >
                 <h2 style="color:#1d4781;"> <strong> Quem somos? </strong> </h2>  
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12" data-effect="slide-bottom">
                 <?php echo nl2br($fetch['ds_txttopo']);?>
                 <hr>
             </div>
 
 
-            <div class="text-center" >
+            <div class="text-center"  data-effect="slide-bottom">
                 <h2 style="color:#1d4781;"> <strong>Nosso fundamentos</strong> </h2>
             </div>
 
-            <div class="col-md-6 img-responsive">
+            <div class="col-md-6 img-responsive" data-effect="slide-bottom">
                 <img src="<?php echo URL_BASE.'img/'.$fetch['ds_imgfina'];?>" alt="">
                 
             </div>
 
-            <div  class="col-md-6 text-left">
+            <div  class="col-md-6 text-left" data-effect="slide-bottom">
                 <p><i class="fa fa-child" style="font-size:44px;"></i>
                     <span style="font-size: 15pt;">&nbsp;Prestar auxílio e respeitar o próximo.</span></p>
                 <br>
@@ -73,7 +73,7 @@ $fetch = mysql_fetch_array($resultado);
                 </p>
 
             </div>
-            <div class="col-md-12">
+            <div class="col-md-12" data-effect="slide-bottom">
                 &nbsp;
                 <hr>
                     <?php echo nl2br($fetch['ds_txtfina']);?>

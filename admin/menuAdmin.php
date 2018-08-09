@@ -24,7 +24,7 @@
             <div class="col-lg-3 col-md-3 col-sm-3">
                 <ul class="dm-sidebar-nav">
                     <li><a href="javascript:void(0);">Slide Início</a></li>
-                    <li><a href="javascript:void(0);">Sobre Nós</a></li>
+                    <li><a href="sobre.php">Sobre Nós</a></li>
                     <li><a href="pedidos.php">Pedidos</a></li>
                     <li><a href="usuarios.php">Usuários / Instituições</a></li>
                     <li><a href="javascript:void(0);" onclick="sairAdmin()">Sair</a></li>

@@ -5,147 +5,212 @@ include_once('menuAdmin.php');
 ?>
 
 <div class="col-lg-9 col-md-9 col-sm-9">
-    <p class="lead text-muted">Usuários</p>
+    <p class="lead text-muted">Página Sobre</p>
+    <div class="row">
+        <div class="col-md-6">
+            <p class="lead text-muted">Textos</p>
+        </div>
+        <div class="col-md-4">
+            <p class="lead text-muted">&nbsp;</p>
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-success" onclick="salvarSobre()">Salvar</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 form-group">
 
-    <table class="table table-striped" data-effect="fade">
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nome</th>
-                <th>Endereço</th>
-                <th>Telefone</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody id="tableEdtUser"></tbody>
-    </table>    
-</div>
+            <div class="col-md-12">
+                <label>Texto: Quem Somos?</label>
+                <textarea class="form-control" rows="5" id="txtquem" name='txtquem'> </textarea>
+                <p>
+            </div>
+            <div class="col-md-12">
+                <label>Texto: Rodapé</label>
+                <textarea class="form-control" rows="5" id="txtfina" name='txtfina'> </textarea>
+                <p>
+            </div>
+            <p class="lead text-muted">Curiosidades</p>
+            <div class="col-md-12">
+                <table class="table table-striped" data-effect="fade">
+                    <thead>
+                        <tr>
+                            <th>Valor</th>
+                            <th>Texto</th>
+                            <th style="text-align: right;">Edição</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableEdtCuri"></tbody>
+                </table>  
+            </div>
+            <p class="lead text-muted">Fotos</p>   
+            <div class="col-md-12">
+                <div class="col-md-5 form-group">
+                    <label>Foto do Topo:</label>
+                    <input class="form-group" type="file" required="required" name='foto1' id="foto1">
+                    <p>
+                </div>
+                <div class="col-md-2"> </div>
+                <div class="col-md-5 form-group">
+                    <label>Foto do Meio:</label>
+                    <input class="form-group" type="file" required="required" id="foto2" name='foto2'>
+                    <p>
+                </div>
+            </div>
 
-<div class="modal fade" id="modalEdtUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Edição de Usuário</h4>
-            </div>
-            <div class="modal-body">
-                <form id="formUserAdmin">
-                    <input type="hidden" name="cd_usuario" id="cd_usuario" />
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control tudo-maiusc" name="nm_usuario" id="nm_usuario" placeholder="Nome Completo">
+        </div>
+    </div>
+    <div class="modal fade" id="modalEdtCurios" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="width: 90%;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Edição de Usuário</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="formCurios">
+                        <div class="tabbable">
+                            <ul class="nav nav-tabs">
+                                <li class="active"><a href="#cadastro" data-toggle="tab">Editar Curiosidade</a></li>
+                            </ul>
+                            <div class="tab-content" style="overflow-x: hidden;">
+                                <div class="tab-pane active" id="campo">
+                                    <input type="hidden" name="campo" id="campo" />
+                                    <div class="row">
+                                        <div class="col-sm-3">
+                                            <label>Texto</label>
+                                            <input type="text" class="form-control" name="ds_curios" id="ds_curios" placeholder="Texto que irá aparecer">
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <label>Valor</label>
+                                            <input type="number" class="form-control" name="vr_curios" id="vr_curios" placeholder="Valor">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            &nbsp;
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="button" style="margin-top:13%" class="btn btn-success" onclick="salvaCuri()">Salvar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control tudo-minusc" name="ds_emailss" id="ds_emailss" placeholder="Email">
-                        </div>
-                    </div>
-                    <div class="row margin-top-20">
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" name="nr_docucpf" id="nr_docucpf" maxlength="14" placeholder="CPF / CNPJ" onKeyPress="return SomenteNumero(event)">
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="password" class="form-control tudo-minusc" name="ds_senhass" id="ds_senhass" placeholder="Senha">
-                        </div>
-                    </div>
-                    <div class="row margin-top-20">
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control tudo-maiusc" name="ds_enderec" id="ds_enderec" placeholder="Endereço">
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control tudo-maiusc" name="nr_enderec" id="nr_enderec" maxlength="10" placeholder="Nº do Endereço">
-                        </div>
-                    </div>
-                    <div class="row margin-top-20">
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control tudo-maiusc" name="ds_bairros" id="ds_bairros" maxlength="30" placeholder="Bairro">
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" name="nr_cepusua" id="nr_cepusua" maxlength="10" placeholder="CEP" onKeyPress="return SomenteNumero(event)">
-                        </div>
-                    </div>
-                    <div class="row margin-top-20">
-                        <div class="col-sm-6">
-                            <select class="form-control" onchange="selectEstado()" name="cd_estados" id="cd_estados">
-                                <option value="0">Estado</option>
-                                <?php
-                                $sql = mysql_query("SELECT cd_estado, UPPER(nm_estado) AS nm_estado FROM estado ORDER BY nm_estado ASC");
-                                while($qr = mysql_fetch_array($sql)){
-                                    echo '<option value="'.$qr['cd_estado'].'">'.$qr['nm_estado'].'</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="col-sm-6">
-                            <select class="form-control" name="cd_cidades" id="cd_cidades">
-                                <?php
-                                $sql = mysql_query("SELECT cd_cidade, UPPER(nm_cidade) AS nm_cidade FROM cidade ORDER BY nm_cidade ASC");
-                                while($qr = mysql_fetch_array($sql)){
-                                    echo '<option value="'.$qr['cd_cidade'].'">'.$qr['nm_cidade'].'</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row margin-top-20">
-                        <div class="col-sm-6">
-                            <input type="text" class="form-control" name="nr_telefon" id="nr_telefon" placeholder="Telefone" data-mask="(99) 9999-9999" onKeyPress="return SomenteNumero(event)">
-                        </div>
-                        <div class="col-sm-6">
-                            <input type="date" class="form-control" name="dt_nascime" id="dt_nascime" value="1980-01-01">
-                        </div>
-                    </div>
-                    <div class="row margin-top-20">
-                        <div class="col-sm-6">
-                            <select class="form-control" name="cd_generos" id="cd_generos">
-                                <option value="0">Gênero</option>
-                                <?php
-                                $sql = mysql_query("SELECT cd_sexocli, UPPER(ds_sexocli) AS ds_sexocli FROM sexo ORDER BY ds_sexocli ASC");
-                                while($qr = mysql_fetch_array($sql)){
-                                    echo '<option value="'.$qr['cd_sexocli'].'">'.$qr['ds_sexocli'].'</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-success" onclick="salvarEdtUser()">Salvar</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                        </form>
+                     </div>
             </div>
         </div>
     </div>
 </div>
 
+
 <script type="text/javascript">
-    
-    $(document).ready(function(){
-        listaUser();
+    $(document).ready(function () {
+        listaCuri();
+        carregaSobre();
     });
-    
-    function listaUser(){
-        
-        $.post("../ajax/ajax.php?acao=listaUser",{},
+    function listaCuri() {
+        $.post("../ajax/ajax.php?acao=listaCuri", {},
+                function (data) {
+                    $("#tableEdtCuri").html(data);
+                }
+        , "html");
+    }
+    function carregaSobre() {
+        $.post("../ajax/ajax.php?acao=carregaSobre", {},
+                function (data) {
+
+                    var texto = JSON.parse(data);
+                    $("#txtquem").val(texto.ds_txttopo);
+                    $("#txtfina").val(texto.ds_txtfina);
+                }
+        , "html");
+    }
+
+    $("#foto1").on('change', function (e) {
+        var data = new FormData();
+        data.append('foto1', $('#foto1')[0].files[0]);
+        $.ajax({
+            url: '../ajax/ajax.php?acao=salvaImg1',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: data,
+            type: 'post',
+            success: function (retorno) {
+            }
+        });
+
+    });
+    $("#foto2").on('change', function (e) {
+        var data = new FormData();
+        data.append('foto2', $('#foto2')[0].files[0]);
+        $.ajax({
+            url: '../ajax/ajax.php?acao=salvaImg1',
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: data,
+            type: 'post',
+            success: function (retorno) {
+            }
+        });
+
+    });
+
+    function salvarSobre() {
+
+        var ds_txttopo = $("#txtquem").val();
+        var ds_txtfina = $("#txtfina").val();
+        $.post("../ajax/ajax.php?acao=salvarSobre", {ds_txttopo: ds_txttopo, ds_txtfina: ds_txtfina},
+                function (data) {
+                    if (data == 'FIELD_FALSE') {
+                        AvisoDev('TODOS OS CAMPOS SÃO OBRIGATÓRIOS. TENTE NOVAMENTE !', 'warning', 5000);
+                    } else if (data == 'QUERY_TRUE') {
+                        AvisoDev('ATUALIZAÇÃO REALIZADA COM SUCESSO !', 'success', 3000);
+                        listaCuri();
+                        carregaSobre();
+
+                    } else if (data == 'QUERY_FALSE') {
+                        AvisoDev('FALHA NA OPERAÇÃO. TENTE NOVAMENTE !', 'error', 3000);
+                    } else {
+                        alert(data);
+                    }
+
+                }
+        , "html");
+
+    }
+    function edtCurios(campo){
+        $.post("../ajax/ajax.php?acao=edtCurios",{campo:campo},
         function(data){
-            $("#tableEdtUser").html(data);
+            var curi = JSON.parse(data); 
+            $("#ds_curios").val(curi.ds_curios);
+            $("#vr_curios").val(curi.nr_curios);
+            $("#campo").val(campo);
+            
+            $('#modalEdtCurios').modal('show');
+            
         }
         ,"html");
         
     }
-    
-    function salvarEdtUser(){
-        
-        var formUserAdmin = $("#formUserAdmin").serializeArray();
+    function salvaCuri(){   
+        var campo = $("#campo").val();
+        var ds_curios = $("#ds_curios").val();
+        var vr_curios = $("#vr_curios").val();
 
-        $.post("../ajax/ajax.php?acao=salvarEdtUser",{formUserAdmin:formUserAdmin},
+        $.post("../ajax/ajax.php?acao=salvarCurios",{campo:campo,ds_curios:ds_curios,vr_curios:vr_curios},
         function(data){
-            
+            alert(data);
             if(data == 'QUERY_TRUE'){
                 
-                $("#modalEdtUser").modal('hide');
-                listaUser();
+                $("#modalEdtCurios").modal('hide');
+                listaCuri();
                 AvisoDev('ATUALIZAÇÃO REALIZADA COM SUCESSO !','success',3000);
                 
-            } else {
+            } else 
+            if (data == 'QUERY_FALSE') {
+                        AvisoDev('TODOS OS CAMPOS SÃO OBRIGATÓRIOS !', 'error', 3000);
+                } else {
                 AvisoDev('ERRO! TENTE NOVAMENTE OU INFORME O ADMINISTRADOR DO SITE.','error',5000);
             }
             
@@ -153,48 +218,6 @@ include_once('menuAdmin.php');
         ,"html");
        
     }
-    
-    function edtUser(id){
-        
-        $.post("../ajax/ajax.php?acao=edtUser",{cd_usuario:id},
-        function(data){
-            
-            var usuario = JSON.parse(data);
-            
-            $("#cd_usuario").val(usuario.cd_usuario);
-            $("#nm_usuario").val(usuario.nm_usuario);
-            $("#ds_emailss").val(usuario.ds_emailss);
-            $("#nr_docucpf").val(usuario.nr_docucpf);
-            $("#ds_senhass").val(usuario.ds_senhass);
-            $("#ds_enderec").val(usuario.ds_enderec);
-            $("#nr_enderec").val(usuario.nr_enderec);
-            $("#ds_bairros").val(usuario.ds_bairros);
-            $("#nr_cepusua").val(usuario.nr_cepusua);
-            $("#cd_estados").val(usuario.cd_estados);
-            $("#cd_cidades").val(usuario.cd_cidades);
-            $("#nr_telefon").val(usuario.nr_telefon);
-            $("#dt_nascime").val(usuario.dt_nascime);
-            $("#cd_generos").val(usuario.cd_generos);
-            
-            $('#modalEdtUser').modal('show');
-            
-        }
-        ,"html");
-        
-    }
-    
-    function selectEstado(){
-        
-        var cd_estados = $("#cd_estados").val();
-        
-        $.post("../ajax/ajax.php?acao=selectEstado",{cd_estados:cd_estados},
-        function(data){
-            $("#cd_cidades").html(data);
-        }
-        ,"html");
-        
-    }
-    
 </script>
 
 <?php
