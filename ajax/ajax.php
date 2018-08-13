@@ -266,7 +266,7 @@ if(!empty($acao)){
                 }
 
                 //Gerar novo nome para o arquivo
-                $ds_imagens = $_SESSION['cpfUsuario'].'.jpg';
+                $ds_imagens = $_SESSION['cpfUsuario'].'.png';
                 
                 include_once('../wideimage/WideImage.php');
                 $image = WideImage::load($upTemp); //Carrega a imagem utilizando a WideImage
@@ -376,6 +376,7 @@ if(!empty($acao)){
         }
         
     } elseif ($acao == 'listaCuri') {
+        
         $query="SELECT ds_curios1, ds_curios2,ds_curios3,ds_curios4,nr_curios1,nr_curios2,nr_curios3,nr_curios4 FROM empdetalhe";
         $resultado1=mysql_query($query);
         $resultado=mysql_fetch_assoc($resultado1);        
@@ -399,9 +400,11 @@ if(!empty($acao)){
                 <td>' . $resultado['nr_curios4'] . '</td>
                 <td>' . $resultado['ds_curios4'] . '</td>
                 <td style="text-align: right;"><button type="button" class="btn btn-sm btn-primary" onclick="edtCurios(\'ds_curios4\')">Editar</button></td>
-            </tr>';                    
+            </tr>';
+        
         echo $result;
         exit;
+        
     }elseif($acao=='carregaSobre'){
         $query1="SELECT ds_txttopo, ds_txtfina FROM empdetalhe";
         $query=mysql_query($query1);
@@ -424,7 +427,7 @@ if(!empty($acao)){
                 $upPasta  = '../img/';
 
                 //Gerar novo nome para o arquivo
-                $foto1   = 'quem_topo.jpg';
+                $foto1   = 'quem_topo.png';
                 
                 include_once('../wideimage/WideImage.php');
                 $image = WideImage::load($upTemp); //Carrega a imagem utilizando a WideImage
@@ -433,7 +436,7 @@ if(!empty($acao)){
 
                 $image->saveToFile($upPasta.$foto1); //Salva a imagem
 
-                $updateImg = mysql_query("UPDATE empdetalhe SET ds_imgtopo ='quem_topo.jpg'");
+                $updateImg = mysql_query("UPDATE empdetalhe SET ds_imgtopo ='quem_topo.png'");
             }
         }elseif(isset($_FILES['foto2'])){
             if($_FILES['foto2']['error'] == UPLOAD_ERR_OK){
@@ -448,7 +451,7 @@ if(!empty($acao)){
                 $upPasta  = '../img/';
 
                 //Gerar novo nome para o arquivo
-                $foto2   = 'quem_meio.jpg';
+                $foto2   = 'quem_meio.png';
                 
                 include_once('../wideimage/WideImage.php');
                 $image = WideImage::load($upTemp); //Carrega a imagem utilizando a WideImage
@@ -457,7 +460,7 @@ if(!empty($acao)){
 
                 $image->saveToFile($upPasta.$foto2); //Salva a imagem
 
-                $updateImg = mysql_query("UPDATE empdetalhe SET ds_imgfina ='quem_meio.jpg'");
+                $updateImg = mysql_query("UPDATE empdetalhe SET ds_imgfina ='quem_meio.png'");
             }
         }
         

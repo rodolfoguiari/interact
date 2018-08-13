@@ -38,10 +38,13 @@ $usuario->SelectUsuario($id);
                     <tr>
                         <th style="text-align:center;">Produto</th>
                         <th style="text-align:center;">Quantidade</th>
-                        <th style="text-align:center;">Status</th>
+                        <th style="text-align:center;">Un. Medida</th>
                     </tr>
                     <?php
-                    $sql = mysql_query("SELECT id_doacoes,cd_empresa,cd_entidad,UPPER(ds_pedidos) AS ds_pedidos,qt_quantid,ds_statuss FROM doacoes WHERE cd_entidad = " . $id);
+                    $sql = mysql_query("SELECT doacoes.id_doacoes,doacoes.cd_empresa,doacoes.cd_entidad,UPPER(doacoes.ds_pedidos) AS ds_pedidos,doacoes.qt_quantid,unidade_medida.ds_unidade
+                                        FROM doacoes
+                                        INNER JOIN unidade_medida ON (doacoes.cd_unidade = unidade_medida.cd_unidade)
+                                        WHERE doacoes.cd_entidad = " . $id);
                     while($linha = mysql_fetch_array($sql)){
                         echo                        
                             '<tr>
@@ -52,7 +55,7 @@ $usuario->SelectUsuario($id);
                                     '.$linha['qt_quantid'].' 
                                 </td>
                                 <td  style="text-align:center;">
-                                    '.$linha['ds_statuss'].'
+                                    '.$linha['ds_unidade'].'
                                 </td>
                             </tr>';
                     }

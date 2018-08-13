@@ -200,7 +200,7 @@ include_once('menuAdmin.php');
 
         $.post("../ajax/ajax.php?acao=salvarCurios",{campo:campo,ds_curios:ds_curios,vr_curios:vr_curios},
         function(data){
-            alert(data);
+            
             if(data == 'QUERY_TRUE'){
                 
                 $("#modalEdtCurios").modal('hide');

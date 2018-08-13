@@ -39,16 +39,17 @@ include_once('topo.php');
                     $resultado = mysql_query($query);
                     $cont = 1;
 
-                    while ($linha = mysql_fetch_array($resultado)) {
+                    while($linha = mysql_fetch_array($resultado)){
                         
                         if(empty($linha['ds_imagens'])){
-                            
                             $pasta = "sem_imagem.jpg";
-                            
                         } else {
                             
                             $img = $linha['ds_imagens'];
-                            $pasta = explode('.',$img)[0] . '/' . $img;
+                            
+                            $a = explode('.',$img);
+                            $pasta = $a[0];
+                            $pasta = $pasta . '/' . $img;
                             
                         }
                         
