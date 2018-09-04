@@ -11,7 +11,7 @@ include_once('config/connect_base.php');
 
         <link href="<?php echo URL_BASE?>images/favicon.png" rel="shortcut icon" />
         <meta http-equiv="content-type" charset="<?php echo CHARSET; ?>">
-        <title>INTERACT</title>
+        <title><?php echo NOME_SISTEMA; ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta name="description" content="">
         <meta name="keywords" content="">

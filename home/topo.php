@@ -25,7 +25,7 @@
 <header class="header-wrapper">
     <div class="container">
         <div class="col-lg-2 col-md-2 col-sm-2">
-            <a class="cssLogo" href="<?php echo URL_BASE; ?>"><img src="<?php echo URL_BASE; ?>images/logo4.png" alt=""></a>
+            <a class="cssLogo" href="<?php echo URL_BASE; ?>"><img src="<?php echo URL_BASE; ?>images/logo5.png" alt=""></a>
         </div>
         <div class="col-lg-10 col-md-10 col-sm-12">
             <nav class="navbar navbar-default fhmm" role="navigation">
