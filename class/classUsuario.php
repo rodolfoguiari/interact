@@ -22,6 +22,7 @@ class classUsuario{
     public $cd_acessos;
     public $ds_senhass;
     public $cd_generos;
+    public $ds_sobress;
     public $ds_imagens;
     public $ds_imgrota;
     
@@ -53,6 +54,7 @@ class classUsuario{
             $this->cd_acessos = $qr['cd_acessos'];
             $this->ds_senhass = $qr['ds_senhass'];
             $this->cd_generos = $qr['cd_generos'];
+            $this->ds_sobress = $qr['ds_sobress'];
             $this->ds_imagens = $qr['ds_imagens'];
         }
         

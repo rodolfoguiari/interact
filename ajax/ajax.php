@@ -60,26 +60,33 @@ if(!empty($acao)){
                 exit;
             } else {
                 
-                include_once('../class/classPegaId.php');
-                $id_proximo = new classPegaId();
-                $cd_usuario = $id_proximo->PegaUltimoId('cd_usuario','usuario');
-
-                mysql_query("SET AUTOCOMMIT=0");
-                mysql_query("START TRANSACTION");
-
-                $query = "INSERT INTO usuario (cd_empresa,cd_usuario,nm_usuario,ds_enderec,nr_enderec,ds_complem,ds_bairros,nr_cepusua,cd_paisess,cd_estados,cd_cidades,nr_telefon,nr_celular,cd_operado,ds_emailss,dt_nascime,
-                          cd_generos,nr_documrg,nr_docucpf,cd_acessos,ds_senhass,dt_inclusa) VALUES ('1','".$cd_usuario."','".$nm_usuario."','".$ds_enderec."','".$nr_enderec."','','".$ds_bairros."','".$nr_endecep."','1',
-                          '".$cd_estados."','".$cd_cidades."','".$nr_telefon."','','0','".$ds_emailss."','".$dt_nascime."','".$cd_generos."','','".$nr_cnpjcpf."','1','".$ds_senhass."','".DtAtual()."')";
-
-                $insert = mysql_query($query);
-                if($insert == true){
-                    mysql_query("COMMIT");
-                    echo 'QUERY_TRUE';
+                if(strlen($nr_cnpjcpf) != 14){
+                    echo 'CNPJ_FALSE';
                     exit;
                 } else {
-                    mysql_query("ROLLBACK");
-                    echo 'QUERY_FALSE';
-                    exit;
+                    
+                    include_once('../class/classPegaId.php');
+                    $id_proximo = new classPegaId();
+                    $cd_usuario = $id_proximo->PegaUltimoId('cd_usuario','usuario');
+
+                    mysql_query("SET AUTOCOMMIT=0");
+                    mysql_query("START TRANSACTION");
+
+                    $query = "INSERT INTO usuario (cd_empresa,cd_usuario,nm_usuario,ds_enderec,nr_enderec,ds_complem,ds_bairros,nr_cepusua,cd_paisess,cd_estados,cd_cidades,nr_telefon,nr_celular,cd_operado,ds_emailss,dt_nascime,
+                              cd_generos,nr_documrg,nr_docucpf,cd_acessos,ds_senhass,dt_inclusa) VALUES ('1','".$cd_usuario."','".$nm_usuario."','".$ds_enderec."','".$nr_enderec."','','".$ds_bairros."','".$nr_endecep."','1',
+                              '".$cd_estados."','".$cd_cidades."','".$nr_telefon."','','0','".$ds_emailss."','".$dt_nascime."','".$cd_generos."','','".$nr_cnpjcpf."','1','".$ds_senhass."','".DtAtual()."')";
+
+                    $insert = mysql_query($query);
+                    if($insert == true){
+                        mysql_query("COMMIT");
+                        echo 'QUERY_TRUE';
+                        exit;
+                    } else {
+                        mysql_query("ROLLBACK");
+                        echo 'QUERY_FALSE';
+                        exit;
+                    }
+                    
                 }
                 
             }
@@ -150,6 +157,10 @@ if(!empty($acao)){
                 
                 if($campos['name'] == 'dt_nascime' && empty($campos['value'])){
                     $campos['value'] = '1900-01-01';
+                }
+                
+                if($campos['name'] == 'ds_sobress' && !empty($campos['value'])){
+                    $campos['value'] = removeAcentosBoby($campos['value']);
                 }
                 
                 $value .= $campos['name'] . " = '" . $campos['value'] . "', ";
@@ -279,6 +290,122 @@ if(!empty($acao)){
             }
         }
         
+    } elseif($acao == 'salvaGaleriaUser'){
+        
+        if(isset($_FILES['ds_galeria'])){
+            if($_FILES['ds_galeria']['error'] == UPLOAD_ERR_OK){
+
+                $user = $_GET['user'];
+                
+                $sql = mysql_query("SELECT nr_docucpf FROM usuario WHERE cd_usuario = '".$user."'");
+                $qr = mysql_fetch_assoc($sql);
+                $cpfUsuario = $qr['nr_docucpf'];
+                
+                //Propriedades do arquivo
+                $upName = $_FILES['ds_galeria']['name'];
+                $upType = $_FILES['ds_galeria']['type'];
+                $upSize = $_FILES['ds_galeria']['size'];
+                $upTemp = $_FILES['ds_galeria']['tmp_name'];
+
+                //Pasta para salvar o arquivo
+                $upPasta  = '../img/usuario/'.$cpfUsuario.'/';
+
+                if(is_dir($upPasta)){
+                    $diretorio = dir($upPasta);
+                    while($arquivo = $diretorio->read()){
+                        if(($arquivo != '.') && ($arquivo != '..')){
+                            if($arquivo == $cpfUsuario){
+                                unlink($upPasta.$arquivo);
+                            }
+                        }
+                    }
+                    $diretorio->close();
+                } else {
+                    mkdir("../img/usuario/".$cpfUsuario,0777);
+                }
+
+                //Gerar novo nome para o arquivo
+                $ds_imagens = 'galeria1.png';
+                
+                $sql = mysql_query("SELECT COUNT(ds_galeria) AS qtde FROM usuario_galeria WHERE cd_usuario = '".$user."'");
+                if(mysql_num_rows($sql) > 0){
+                    $qr = mysql_fetch_assoc($sql);
+                    $qtde = $qr['qtde'];
+                    $ds_imagens = 'galeria'.($qtde+1).'.png';
+                }
+                
+                if($qtde <= MAX_IMG_USER){
+                    
+                    include_once('../wideimage/WideImage.php');
+                    $image = WideImage::load($upTemp); //Carrega a imagem utilizando a WideImage
+                    //$image = $image->resize(550,400, 'fill'); //Redimensiona a imagem para ? de largura e ? de altura, mantendo sua proporção no máximo possível
+                    //$image = $image->crop('center','center',353,119); //Corta a imagem do centro, forçando sua altura e largura
+
+                    $image->saveToFile($upPasta.$ds_imagens); //Salva a imagem
+
+                    $insertImg = mysql_query("INSERT INTO usuario_galeria (cd_usuario, ds_galeria, dt_inclusa, hr_inclusa) VALUES ('".$user."','".$ds_imagens."','".DtAtual()."','".HrAtual()."')");
+                    
+                }
+            }
+        }
+        
+    } elseif($acao == 'exibeImgUser'){
+        
+        $cd_usuario = $_POST['cd_usuario'];
+        
+        $sql = mysql_query("SELECT nr_docucpf FROM usuario WHERE cd_usuario = '".$cd_usuario."'");
+        $qr = mysql_fetch_assoc($sql);
+        $cpfUsuario = $qr['nr_docucpf'];
+
+        $result = "";
+        $sql = mysql_query("SELECT ds_galeria FROM usuario_galeria WHERE cd_usuario = '".$cd_usuario."'");
+        if(mysql_num_rows($sql) > 0){
+            
+            while($qr = mysql_fetch_array($sql)){
+                
+                $result .= '<div class="col-sm-2 col-xs-4 margin-top-10">
+                                <img src="'.URL_BASE.'img/usuario/'.$cpfUsuario.'/'.$qr['ds_galeria'].'" alt="">
+                                <br/>
+                                <button type="button" class="btn btn-sm btn-danger width-100-porc" onclick="delImgUser(\''.$cd_usuario.'\',\''.$qr['ds_galeria'].'\')">Excluir</button>
+                            </div>';
+                
+            }
+            
+        }
+        
+        echo $result;
+        exit;
+        
+    } elseif($acao == 'delImgUser'){
+        
+        $user = (isset($_POST['user']) && $_POST['user'] > 0) ? $_POST['user'] : 0;
+        $img = (isset($_POST['img']) && !empty($_POST['img'])) ? $_POST['img'] : "";
+        
+        if($user > 0 && !empty($img)){
+            
+            $sql = mysql_query("SELECT nr_docucpf FROM usuario WHERE cd_usuario = '".$user."'");
+            $qr = mysql_fetch_assoc($sql);
+            $cpfUsuario = $qr['nr_docucpf'];
+            
+            mysql_query("SET AUTOCOMMIT=0");
+            mysql_query("START TRANSACTION");
+
+            $delete = mysql_query("DELETE FROM usuario_galeria WHERE cd_usuario = '".$user."' AND ds_galeria = '".$img."'");
+
+            if($delete == true){
+                mysql_query("COMMIT");
+                
+                unlink('../img/usuario/'.$cpfUsuario.'/'.$img);
+                
+                echo 'QUERY_TRUE';
+                exit;
+            } else {
+                mysql_query("ROLLBACK");
+                echo 'QUERY_FALSE';
+                exit;
+            }
+            
+        }
         
     } elseif($acao == 'enviaContato'){
         

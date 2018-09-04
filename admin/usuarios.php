@@ -21,7 +21,7 @@ include_once('menuAdmin.php');
     </table>    
 </div>
 
-<div class="modal fade" id="modalEdtUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal" id="modalEdtUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document" style="width: 90%;">
         <div class="modal-content">
             <div class="modal-header">
@@ -33,7 +33,9 @@ include_once('menuAdmin.php');
                     <div class="tabbable">
                         <ul class="nav nav-tabs">
                             <li class="active"><a href="#cadastro" data-toggle="tab">Cadastro</a></li>
-                            <li><a href="#imagem" data-toggle="tab">Imagem</a></li>
+                            <li><a href="#aba_sobre" data-toggle="tab">Sobre</a></li>
+                            <li><a href="#imagem" data-toggle="tab">Logo</a></li>
+                            <li><a href="#aba_galeria" data-toggle="tab">Galeria</a></li>
                         </ul>
                         <div class="tab-content" style="overflow-x: hidden;">
                             <div class="tab-pane active" id="cadastro">
@@ -122,6 +124,14 @@ include_once('menuAdmin.php');
                                     </div>
                                 </div>
                             </div>
+                            <div class="tab-pane" id="aba_sobre">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label>Diga mais sobre você</label>
+                                        <textarea class="form-control tudo-maiusc" rows="5" name="ds_sobress" id="ds_sobress" maxlength="1000"></textarea>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="tab-pane" id="imagem">
                                 <div class="row">
                                     <div class="col-sm-4 col-sm-offset-4">
@@ -129,6 +139,15 @@ include_once('menuAdmin.php');
                                         <input type="file" class="form-control" name="ds_imagens" id="ds_imagens" />
                                     </div>
                                 </div>
+                            </div>
+                            <div class="tab-pane" id="aba_galeria">
+                                <div class="row">
+                                    <div class="col-sm-4 col-sm-offset-4">
+                                        <label>Galeria de Imagens (Max. <?php echo MAX_IMG_USER; ?> Imagens)</label>
+                                        <input type="file" class="form-control" name="ds_galeria" id="ds_galeria" />
+                                    </div>
+                                </div>
+                                <div class="row" id="div_img_user"></div>
                             </div>
                         </div>
                     </div>
@@ -146,6 +165,11 @@ include_once('menuAdmin.php');
     
     $(document).ready(function(){
         listaUser();
+        
+        $("#modalEdtUser").on('shown.bs.modal', function(){
+            exibeImgUser();
+        });
+        
     });
     
     $("#ds_imagens").on('change', function(e){
@@ -166,6 +190,63 @@ include_once('menuAdmin.php');
         });
         
     });
+    
+    $("#ds_galeria").on('change', function(e){
+        
+        var data = new FormData();
+        data.append('ds_galeria', $('#ds_galeria')[0].files[0]);
+        
+        var cd_usuario = $("#cd_usuario").val();
+        
+        $.ajax({
+            url: '../ajax/ajax.php?acao=salvaGaleriaUser&user='+cd_usuario,
+            cache: false,
+            contentType: false,
+            processData: false,
+            data: data,
+            type: 'post',
+            success: function(retorno){
+                $("#ds_galeria").val('');
+                exibeImgUser();
+            }
+        });
+        
+    });
+    
+    function exibeImgUser(){
+        
+        var cd_usuario = $("#cd_usuario").val();
+        
+        $.post("../ajax/ajax.php?acao=exibeImgUser",{cd_usuario:cd_usuario},
+        function(data){
+            $("#div_img_user").html(data);
+        }
+        ,"html");
+        
+    }
+    
+    function delImgUser(user,img){
+        
+        if(confirm('DESEJA REALMENTE EXCLUIR ESTA IMAGEM ?')){
+            
+            $.post("../ajax/ajax.php?acao=delImgUser",{user:user,img:img},
+            function(data){
+                
+                if(data == 'QUERY_TRUE'){
+                    AvisoDev('OPERAÇÃO EFETUADA COM SUCESSO !','success',3000);
+                    exibeImgUser();
+                } else if(data == 'QUERY_FALSE'){
+                    AvisoDev('ERRO. TENTE NOVAMENTE !','error',3000);
+                } else {
+                    alert(data);
+                }
+                
+            }
+            ,"html");
+            
+        }
+        
+    }
     
     function listaUser(){
         
@@ -220,6 +301,7 @@ include_once('menuAdmin.php');
             $("#nr_telefon").val(usuario.nr_telefon);
             $("#dt_nascime").val(usuario.dt_nascime);
             $("#cd_generos").val(usuario.cd_generos);
+            $("#ds_sobress").val(usuario.ds_sobress);
             
             $('#modalEdtUser').modal('show');
             

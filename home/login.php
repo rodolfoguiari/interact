@@ -38,7 +38,7 @@ if(isset($_SESSION['cpfUsuario']) && !empty($_SESSION['cpfUsuario'])){
                         <div class="col-sm-12">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <input type="text" class="form-control" id="nr_cnpjcpf_login" maxlength="14" placeholder="CPF / CNPJ" onKeyPress="return SomenteNumero(event)">
+                                    <input type="text" class="form-control" id="nr_cnpjcpf_login" maxlength="14" placeholder="CNPJ" onKeyPress="return SomenteNumero(event)">
                                 </div>
                             </div>
                             <div class="row margin-top-20">
@@ -68,7 +68,7 @@ if(isset($_SESSION['cpfUsuario']) && !empty($_SESSION['cpfUsuario'])){
                             </div>
                             <div class="row margin-top-20">
                                 <div class="col-sm-6">
-                                    <input type="text" class="form-control" id="nr_cnpjcpf" maxlength="14" placeholder="CPF / CNPJ" onKeyPress="return SomenteNumero(event)">
+                                    <input type="text" class="form-control" id="nr_cnpjcpf" maxlength="14" placeholder="CNPJ" onKeyPress="return SomenteNumero(event)">
                                 </div>
                                 <div class="col-sm-6">
                                     <input type="password" class="form-control tudo-minusc" id="ds_senhass" placeholder="Senha">
@@ -164,8 +164,11 @@ if(isset($_SESSION['cpfUsuario']) && !empty($_SESSION['cpfUsuario'])){
                                                   nr_endecep:nr_endecep,cd_estados:cd_estados,cd_cidades:cd_cidades,nr_telefon:nr_telefon,dt_nascime:dt_nascime,cd_generos:cd_generos},
         function(data){
             
-            if(data == 'USER_EXIST'){
-                AvisoDev('CPF / CNPJ JÁ CADASTRADO. TENTE NOVAMENTE !','warning',3000);
+            if(data == 'CNPJ_FALSE'){
+                AvisoDev('CNPJ INVÁLIDO. TENTE NOVAMENTE !','warning',3000);
+                $("#nr_cnpjcpf").focus();
+            } else if(data == 'USER_EXIST'){
+                AvisoDev('CNPJ JÁ CADASTRADO. TENTE NOVAMENTE !','warning',3000);
                 $("#nr_cnpjcpf").focus();
             } else if(data == 'FIELD_FALSE'){
                 AvisoDev('ATENÇÃO! TODOS OS CAMPOS SÃO OBRIGATÓRIOS . . .','warning',3000);
@@ -198,7 +201,7 @@ if(isset($_SESSION['cpfUsuario']) && !empty($_SESSION['cpfUsuario'])){
         var ds_senhass_login = $("#ds_senhass_login").val();
         
         if(nr_cnpjcpf_login == false){
-            AvisoDev('CPF / CNPJ É UM CAMPO OBRIGATÓRIO !','warning',3000);
+            AvisoDev('CNPJ É UM CAMPO OBRIGATÓRIO !','warning',3000);
             $("#nr_cnpjcpf_login").focus();
         } else if(ds_senhass_login == false){
             AvisoDev('SENHA É UM CAMPO OBRIGATÓRIO !','warning',3000);

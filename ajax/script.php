@@ -34,5 +34,13 @@ CREATE TABLE IF NOT EXISTS doacoes (
     PRIMARY KEY (id_doacoes),
     UNIQUE KEY id_doacoes (id_doacoes)
 );
+CREATE TABLE IF NOT EXISTS usuario_galeria (
+    cd_usuario int(11) NOT NULL,
+    ds_galeria varchar(20) NOT NULL,
+    dt_inclusa date NOT NULL,
+    hr_inclusa time NOT NULL,
+    PRIMARY KEY (cd_usuario,ds_galeria)
+);
+ALTER TABLE usuario ADD ds_sobress TEXT NULL DEFAULT NULL AFTER ds_senhass;
 ";
 ?>
