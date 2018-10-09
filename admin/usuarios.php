@@ -142,6 +142,9 @@ include_once('menuAdmin.php');
                             </div>
                             <div class="tab-pane" id="aba_galeria">
                                 <div class="row">
+                                    <div class="col-md-12 color-red"><i>Dimensão recomendada (900 x 390)</i></div>
+                                </div>
+                                <div class="row">
                                     <div class="col-sm-4 col-sm-offset-4">
                                         <label>Galeria de Imagens (Max. <?php echo MAX_IMG_USER; ?> Imagens)</label>
                                         <input type="file" class="form-control" name="ds_galeria" id="ds_galeria" />

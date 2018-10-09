@@ -12,12 +12,23 @@ include_once('home/topo.php');
                 <div class="tp-banner">
                     <ul>
                         <!-- SLIDE  -->
-                        <li data-transition="boxslide" data-slotamount="7" data-masterspeed="1500" >
-                            <img src="img/slide/slide2.png" alt="slidebg1" data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat">
-                        </li>
-                        <li data-transition="fade" data-slotamount="7" data-masterspeed="1500" >
-                            <img src="img/slide/slide4.png" alt="slidebg1" data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat">
-                        </li>
+                        <?php
+                        $transition = 'boxslide';
+                        $sql = mysql_query("SELECT ds_galeria FROM empresa_galeria WHERE cd_empresa = 1 ORDER BY ds_galeria ASC");
+                        while($qr = mysql_fetch_assoc($sql)){
+                        
+                            echo '<li data-transition="'.$transition.'" data-slotamount="7" data-masterspeed="1500" >
+                                    <img src="img/slide/'.$qr['ds_galeria'].'" alt="" data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat">
+                                  </li>';
+                            
+                            if($transition == 'fade'){
+                                $transition = 'boxslide';
+                            } else {
+                                $transition = 'fade';
+                            }
+                        
+                        }
+                        ?>
                         <!--<li data-transition="fade" data-slotamount="7" data-masterspeed="1500" >
                             <img src="demos/01_slider.png"   alt="slidebg1"  data-bgfit="cover" data-bgposition="left top" data-bgrepeat="no-repeat">
                             <div class="tp-caption medium_bg_asbestos skewfromleft customout"
@@ -309,12 +320,56 @@ include_once('home/topo.php');
         </div>
         <!-- Fim Slide Início -->
 
-        <div class="big-message text-center">
-            <h2>Seja bem vindo(a) ao projeto <span>INTERACT</span></h2>
-            <p><i>É sempre um grande prazer tê-los conosco!</i></p>
+        <div class="big-message text-center" style="padding-bottom: 5px;">
+            <h2>Seja bem vindo(a) ao projeto INTERACT</h2>
+            <p><i>O mundo precisa de gente que se preocupa com o próximo!</i></p>
+        </div>
+        
+        <div class="message text-center" style="padding-top: 5px;">
+            <h2>Veja abaixo algumas instituições participantes</h2>
+            <p><i>Faça parte você também. <a href="<?php echo URL_BASE . 'home/login.php'; ?>">Clique aqui</a>, faça seu cadastro e anuncie. É simples e rápido!</i></p>
         </div>
 
-        <div class="container general">
+        <ul id="og-grid" class="og-grid">
+            <li>
+                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/01_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
+                    <img width="250" src="<?php echo URL_BASE; ?>demos/01_demo.jpg" alt="img01"/>
+                    <div>
+                        <h5>Instituição Exemplo</h5>
+                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/02_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
+                    <img width="250" src="<?php echo URL_BASE; ?>demos/02_demo.jpg" alt="img01"/>
+                    <div>
+                        <h5>Instituição Exemplo</h5>
+                        <p><i class="icon-folder-open-alt"></i> Slider</p>
+                    </div>
+                </a>
+            </li>
+            <li>
+                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/03_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
+                    <img width="250" src="<?php echo URL_BASE; ?>demos/03_demo.jpg" alt="img01"/>
+                    <div>
+                        <h5>Instituição Exemplo</h5>
+                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
+                    </div>
+                </a>
+            </li>   
+            <li>
+                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/08_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
+                    <img width="250" src="<?php echo URL_BASE; ?>demos/08_demo.jpg" alt="img01"/>
+                    <div>
+                        <h5>Instituição Exemplo</h5>
+                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
+                    </div>
+                </a>
+            </li>
+        </ul>
+        
+        <!--<div class="container general">
             <div class="col-lg-8 col-md-8 col-sm-12">
                 <h2 class="general-title">
                     <span>Anuncie Conosco</span>
@@ -409,134 +464,33 @@ include_once('home/topo.php');
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="message text-center">
-            <h2>Veja abaixo algumas <span>instituições</span> parceiras</h2>
-            <p>Faça parte você também. <a href="<?php echo URL_BASE . 'home/login.php'; ?>">Clique aqui</a>, faça seu cadastro e anuncie. É simples e rápido!</p>
-        </div>
-
-        <ul id="og-grid" class="og-grid">
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/01_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/01_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/02_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/02_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Slider</p>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/03_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/03_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
-                    </div>
-                </a>
-            </li>   
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/08_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/08_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
-                    </div>
-                </a>
-            </li>	
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/04_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/04_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/05_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/05_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/06_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/06_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/07_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/07_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/09_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/09_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/10_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/10_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Slider</p>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/11_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/11_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
-                    </div>
-                </a>
-            </li>   
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/12_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/12_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
-                    </div>
-                </a>
-            </li>	
-        </ul>
+        </div>-->
 
     </div>
 
     <div class="divider"></div>    
 
     <div class="container">
+        
+        <div class="col-lg-4 col-md-4 col-sm-4" data-effect="pop">
+            <div class="client">
+                <img src="<?php echo URL_BASE; ?>img/patrocinio/rotary.png" alt="">
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4" data-effect="pop">
+            <div class="client">
+                <img src="<?php echo URL_BASE; ?>img/patrocinio/interact.png" alt="">
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-4 col-sm-4" data-effect="pop">
+            <div class="client">
+                <img src="<?php echo URL_BASE; ?>img/patrocinio/etec.png" alt="">
+            </div>
+        </div>
+        
+        <!--
         <div class="col-lg-2 col-md-2 col-sm-2" data-effect="pop">
             <div class="client">
-                <!--<a data-toggle="tooltip" data-placement="top" title="Lorem Ipsum has been the industry's standard dummy text ever since the..." href="javascript:void(0);">
-                    <img src="<?php echo URL_BASE; ?>demos/01_client.png" alt="">
-                </a>-->
                 <img src="<?php echo URL_BASE; ?>demos/01_client.png" alt="">
             </div>
         </div>
@@ -565,6 +519,7 @@ include_once('home/topo.php');
                 <img src="<?php echo URL_BASE; ?>demos/06_client.png" alt="">
             </div>
         </div>
+        -->
     </div>
 </section>
 

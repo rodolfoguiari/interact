@@ -211,6 +211,54 @@ if(!empty($acao)){
         echo $result;
         exit;
         
+    } elseif($acao == 'listaSlide'){
+        
+        $result = "";
+        
+        $query = "SELECT cd_empresa, UPPER(ds_galeria) AS ds_galeria, dt_inclusa, hr_inclusa
+                  FROM empresa_galeria WHERE 1 = 1";
+        
+        $sql = mysql_query($query . " ORDER BY ds_galeria ASC");
+        while($qr = mysql_fetch_array($sql)){
+
+            $result .= '<tr>
+                            <td>'.$qr['cd_empresa'].'</td>
+                            <td>'.$qr['ds_galeria'].'</td>
+                            <td>'.date('d-m-Y',strtotime($qr['dt_inclusa'])).'</td>
+                            <td>'.$qr['hr_inclusa'].'</td>
+                            <td><button type="button" class="btn btn-sm btn-primary width-100-porc" onclick="visualizarSlide(\''.$qr['ds_galeria'].'\')">Visualizar</button></td>
+                            <td><button type="button" class="btn btn-sm btn-danger width-100-porc" onclick="delImgSlide(\''.$qr['ds_galeria'].'\')">Excluir</button></td>
+                        </tr>';
+
+        }
+        
+        echo $result;
+        exit;
+        
+    } elseif($acao == 'listaGaleriaProjeto'){
+        
+        $result = "";
+        
+        $query = "SELECT cd_empresa, UPPER(ds_galeria) AS ds_galeria, dt_inclusa, hr_inclusa
+                  FROM galeria_projeto WHERE 1 = 1";
+        
+        $sql = mysql_query($query . " ORDER BY ds_galeria ASC");
+        while($qr = mysql_fetch_array($sql)){
+
+            $result .= '<tr>
+                            <td>'.$qr['cd_empresa'].'</td>
+                            <td>'.$qr['ds_galeria'].'</td>
+                            <td>'.date('d-m-Y',strtotime($qr['dt_inclusa'])).'</td>
+                            <td>'.$qr['hr_inclusa'].'</td>
+                            <td><button type="button" class="btn btn-sm btn-primary width-100-porc" onclick="visualizarImgProjeto(\''.$qr['ds_galeria'].'\')">Visualizar</button></td>
+                            <td><button type="button" class="btn btn-sm btn-danger width-100-porc" onclick="delImgProjeto(\''.$qr['ds_galeria'].'\')">Excluir</button></td>
+                        </tr>';
+
+        }
+        
+        echo $result;
+        exit;
+        
     } elseif($acao == 'listaPedido'){
         
         $cd_userPedido = (isset($_POST['cd_userPedido']) && !empty($_POST['cd_userPedido'])) ? $_POST['cd_userPedido'] : 0;
@@ -290,6 +338,82 @@ if(!empty($acao)){
             }
         }
         
+    } elseif($acao == 'salvaGaleriaSlide'){
+        
+        if(isset($_FILES['ds_galeria'])){
+            if($_FILES['ds_galeria']['error'] == UPLOAD_ERR_OK){
+
+                //Propriedades do arquivo
+                $upName = $_FILES['ds_galeria']['name'];
+                $upType = $_FILES['ds_galeria']['type'];
+                $upSize = $_FILES['ds_galeria']['size'];
+                $upTemp = $_FILES['ds_galeria']['tmp_name'];
+
+                $sql = mysql_query("SELECT COUNT(ds_galeria) AS qtde_img FROM empresa_galeria");
+                $qr = mysql_fetch_assoc($sql);
+                $qtde_img = $qr['qtde_img'];
+                
+                //Gerar novo nome para o arquivo
+                $ds_imagens = ($qtde_img + 1).'.png';
+                
+                //Pasta para salvar o arquivo
+                $upPasta  = '../img/slide/';
+                
+                if($qtde_img <= MAX_IMG_SLIDE){
+
+                    include_once('../wideimage/WideImage.php');
+                    $image = WideImage::load($upTemp); //Carrega a imagem utilizando a WideImage
+                    $image = $image->resize(1850,600, 'fill'); //Redimensiona a imagem para ? de largura e ? de altura, mantendo sua proporção no máximo possível
+                    //$image = $image->crop('center','center',353,119); //Corta a imagem do centro, forçando sua altura e largura
+
+                    $image->saveToFile($upPasta.$ds_imagens); //Salva a imagem
+
+                    $insertImg = mysql_query("INSERT INTO empresa_galeria (cd_empresa, ds_galeria, dt_inclusa, hr_inclusa) VALUES ('1','".$ds_imagens."','".DtAtual()."','".HrAtual()."')");
+                                        
+                }
+            }
+        }
+        
+        exit;
+        
+    } elseif($acao == 'salvaGaleriaProjeto'){
+        
+        if(isset($_FILES['ds_galeria'])){
+            if($_FILES['ds_galeria']['error'] == UPLOAD_ERR_OK){
+
+                //Propriedades do arquivo
+                $upName = $_FILES['ds_galeria']['name'];
+                $upType = $_FILES['ds_galeria']['type'];
+                $upSize = $_FILES['ds_galeria']['size'];
+                $upTemp = $_FILES['ds_galeria']['tmp_name'];
+
+                $sql = mysql_query("SELECT COUNT(ds_galeria) AS qtde_img FROM galeria_projeto");
+                $qr = mysql_fetch_assoc($sql);
+                $qtde_img = $qr['qtde_img'];
+                
+                //Gerar novo nome para o arquivo
+                $ds_imagens = ($qtde_img + 1).'.png';
+                
+                //Pasta para salvar o arquivo
+                $upPasta  = '../img/galeria/';
+                
+                if($qtde_img <= MAX_IMG_SLIDE){
+                    
+                    include_once('../wideimage/WideImage.php');
+                    $image = WideImage::load($upTemp); //Carrega a imagem utilizando a WideImage
+                    $image = $image->resize(1850,600, 'fill'); //Redimensiona a imagem para ? de largura e ? de altura, mantendo sua proporção no máximo possível
+                    //$image = $image->crop('center','center',353,119); //Corta a imagem do centro, forçando sua altura e largura
+
+                    $image->saveToFile($upPasta.$ds_imagens); //Salva a imagem
+
+                    $insertImg = mysql_query("INSERT INTO galeria_projeto (cd_empresa, ds_galeria, dt_inclusa, hr_inclusa) VALUES ('1','".$ds_imagens."','".DtAtual()."','".HrAtual()."')");
+                    
+                }
+            }
+        }
+        
+        exit;
+        
     } elseif($acao == 'salvaGaleriaUser'){
         
         if(isset($_FILES['ds_galeria'])){
@@ -338,7 +462,7 @@ if(!empty($acao)){
                     
                     include_once('../wideimage/WideImage.php');
                     $image = WideImage::load($upTemp); //Carrega a imagem utilizando a WideImage
-                    //$image = $image->resize(550,400, 'fill'); //Redimensiona a imagem para ? de largura e ? de altura, mantendo sua proporção no máximo possível
+                    $image = $image->resize(900,390, 'fill'); //Redimensiona a imagem para ? de largura e ? de altura, mantendo sua proporção no máximo possível
                     //$image = $image->crop('center','center',353,119); //Corta a imagem do centro, forçando sua altura e largura
 
                     $image->saveToFile($upPasta.$ds_imagens); //Salva a imagem
@@ -375,6 +499,58 @@ if(!empty($acao)){
         
         echo $result;
         exit;
+        
+    } elseif($acao == 'delImgSlide'){
+        
+        $img = (isset($_POST['img']) && !empty($_POST['img'])) ? $_POST['img'] : "";
+        
+        if(!empty($img)){
+            
+            mysql_query("SET AUTOCOMMIT=0");
+            mysql_query("START TRANSACTION");
+
+            $delete = mysql_query("DELETE FROM empresa_galeria WHERE cd_empresa = '1' AND ds_galeria = '".$img."'");
+
+            if($delete == true){
+                mysql_query("COMMIT");
+                
+                unlink('../img/slide/'.$img);
+                
+                echo 'QUERY_TRUE';
+                exit;
+            } else {
+                mysql_query("ROLLBACK");
+                echo 'QUERY_FALSE';
+                exit;
+            }
+            
+        }
+        
+    } elseif($acao == 'delImgProjeto'){
+        
+        $img = (isset($_POST['img']) && !empty($_POST['img'])) ? $_POST['img'] : "";
+        
+        if(!empty($img)){
+            
+            mysql_query("SET AUTOCOMMIT=0");
+            mysql_query("START TRANSACTION");
+
+            $delete = mysql_query("DELETE FROM galeria_projeto WHERE cd_empresa = '1' AND ds_galeria = '".$img."'");
+
+            if($delete == true){
+                mysql_query("COMMIT");
+                
+                unlink('../img/galeria/'.$img);
+                
+                echo 'QUERY_TRUE';
+                exit;
+            } else {
+                mysql_query("ROLLBACK");
+                echo 'QUERY_FALSE';
+                exit;
+            }
+            
+        }
         
     } elseif($acao == 'delImgUser'){
         

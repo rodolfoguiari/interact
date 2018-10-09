@@ -5,7 +5,11 @@
                             <h2 class="general-title">
                                 <span>Sobre o INTERACT</span>
                             </h2>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s</p> 
+                            <?php
+                            $sqlSobre = mysql_query("SELECT ds_txttopo FROM empdetalhe WHERE cd_empresa = 1");
+                            $qrSobre = mysql_fetch_assoc($sqlSobre);
+                            echo '<p>'.substr($qrSobre['ds_txttopo'],0,140).' . . .</p>';
+                            ?>
                             <a class="btn btn-primary btn-sm" href="<?php echo URL_BASE . 'home/sobre.php' ?>">Ler Mais</a>
                         </div>
                     </div>
@@ -15,14 +19,14 @@
                                 <span>Galeria</span>
                             </h2>
                             <ul class="flickr">
-                                <li><a href="javascript:void(0);" title=""><img class="img-thumbnail img-rounded" src="<?php echo URL_BASE; ?>demos/01_flickr.jpg" width="54" height="54" alt="" /></a></li>
-                                <li><a href="javascript:void(0);" title=""><img class="img-thumbnail img-rounded" src="<?php echo URL_BASE; ?>demos/02_flickr.jpg" width="54" height="54" alt="" /></a></li>
-                                <li><a href="javascript:void(0);" title=""><img class="img-thumbnail img-rounded" src="<?php echo URL_BASE; ?>demos/03_flickr.jpg" width="54" height="54" alt="" /></a></li>
-                                <li><a href="javascript:void(0);" title=""><img class="img-thumbnail img-rounded" src="<?php echo URL_BASE; ?>demos/04_flickr.jpg" width="54" height="54" alt="" /></a></li>
-                                <li><a href="javascript:void(0);" title=""><img class="img-thumbnail img-rounded" src="<?php echo URL_BASE; ?>demos/05_flickr.jpg" width="54" height="54" alt="" /></a></li>
-                                <li><a href="javascript:void(0);" title=""><img class="img-thumbnail img-rounded" src="<?php echo URL_BASE; ?>demos/06_flickr.jpg" width="54" height="54" alt="" /></a></li>
-                                <li><a href="javascript:void(0);" title=""><img class="img-thumbnail img-rounded" src="<?php echo URL_BASE; ?>demos/07_flickr.jpg" width="54" height="54" alt="" /></a></li>
-                                <li><a href="javascript:void(0);" title=""><img class="img-thumbnail img-rounded" src="<?php echo URL_BASE; ?>demos/08_flickr.jpg" width="54" height="54" alt="" /></a></li>
+                                <?php
+                                $sqlGaleria = mysql_query("SELECT ds_galeria AS galRodape FROM galeria_projeto WHERE cd_empresa = 1 ORDER BY ds_galeria DESC");
+                                while($qr = mysql_fetch_array($sqlGaleria)){
+                                    echo '<li><a href="javascript:void(0);" title="">
+                                            <img class="img-thumbnail img-rounded" src="'.URL_BASE.'/img/galeria/'.$qr['galRodape'].'" width="54" height="54" alt="" onclick="viewImgProjeto(\''.$qr['galRodape'].'\')">
+                                          </a></li>';
+                                }
+                                ?>
                             </ul>
                         </div>
                     </div>
@@ -105,9 +109,31 @@
             <div class="dmtop">Ir para o topo</div>
         </div>
         
+        <div class="modal" id="modalViewProj" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document" style="width: 90%;">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <div class="tabbable">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <img alt="" id="input_view_project">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <script src="<?php echo URL_BASE; ?>js/application.js"></script>
 
         <script type="text/javascript">
+            
+            $(document).ready(function(){
+                $("#modalViewProj").on('hidden.bs.modal', function(){
+                    $("#input_view_project").attr("src","");
+                });
+            });
             
             function AvisoDev(msg,tipo,time,posicao){
                 
@@ -130,6 +156,11 @@
                     displayTime:time
                 });
                 
+            }
+            
+            function viewImgProjeto(img){
+                $("#input_view_project").attr("src","<?php echo URL_BASE . 'img/galeria/'; ?>" + img);
+                $("#modalViewProj").modal('show');
             }
             
         </script>

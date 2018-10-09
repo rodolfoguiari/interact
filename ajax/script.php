@@ -42,5 +42,19 @@ CREATE TABLE IF NOT EXISTS usuario_galeria (
     PRIMARY KEY (cd_usuario,ds_galeria)
 );
 ALTER TABLE usuario ADD ds_sobress TEXT NULL DEFAULT NULL AFTER ds_senhass;
+CREATE TABLE IF NOT EXISTS empresa_galeria (
+    cd_empresa int(11) NOT NULL,
+    ds_galeria varchar(20) NOT NULL,
+    dt_inclusa date NOT NULL,
+    hr_inclusa time NOT NULL,
+    PRIMARY KEY (cd_empresa,ds_galeria)
+);
+CREATE TABLE IF NOT EXISTS galeria_projeto (
+    cd_empresa int(11) NOT NULL,
+    ds_galeria varchar(20) NOT NULL,
+    dt_inclusa date NOT NULL,
+    hr_inclusa time NOT NULL,
+    PRIMARY KEY (cd_empresa,ds_galeria)
+);
 ";
 ?>

@@ -55,21 +55,21 @@ $fetch = mysql_fetch_array($resultado);
 
             <div  class="col-md-6 text-left" data-effect="slide-bottom">
                 <p><i class="fa fa-child" style="font-size:44px;"></i>
-                    <span style="font-size: 15pt;">&nbsp;Prestar auxílio e respeitar o próximo.</span></p>
+                    <span style="font-size: 15pt;">&nbsp;Formação de Companheirismo</span></p>
                 <br>
                 <p> 
                     <i class="fa fa-line-chart" style="font-size:29px;"></i>
-                    <span style="font-size: 15pt;">&nbsp;Desenvolver a liderança e a integridade.</span>  
+                    <span style="font-size: 15pt;">&nbsp;Prestação de serviços a comunidade</span>  
                 </p>
                 <br>
                 <p>    
                     <i class="fa fa-handshake-o" style="font-size:29px;"></i>
-                    <span style="font-size: 15pt;">&nbsp;Compreender o valor da responsabilidade.</span>  
+                    <span style="font-size: 15pt;">&nbsp;Formação Profissional</span>  
                 </p>
                 <br>
                 <p>    
                     <i class=" fa fa-globe" style="font-size:29px;"></i>
-                    <span style="font-size: 15pt;">&nbsp;Promover a compreensão e boa vontade.</span>  
+                    <span style="font-size: 15pt;">&nbsp;Desenvolvimento da qualidade de liderança</span>  
                 </p>
 
             </div>

@@ -32,7 +32,13 @@ $usuario->SelectUsuario($id);
 
             <div class="col-md-8 ">
                 <h2 class="general-title">
-                    <span>Nosso Pedido</span>
+                    <span>Conheça nossa história</span>
+                </h2>
+                <div>
+                    <p> <?php echo $usuario->ds_sobress; ?></p>
+                </div>
+                <h2 class="general-title">
+                    <span>Nosso pedido</span>
                 </h2>
                 <table class=" table table-striped table-bordered table-hover">
                     <tr>
@@ -45,28 +51,44 @@ $usuario->SelectUsuario($id);
                                         FROM doacoes
                                         INNER JOIN unidade_medida ON (doacoes.cd_unidade = unidade_medida.cd_unidade)
                                         WHERE doacoes.cd_entidad = " . $id);
-                    while($linha = mysql_fetch_array($sql)){
-                        echo                        
-                            '<tr>
+                    while ($linha = mysql_fetch_array($sql)) {
+                        echo
+                        '<tr>
                                 <td>
-                                    '.$linha['ds_pedidos'].'
+                                    ' . $linha['ds_pedidos'] . '
                                 </td>
                                 <td  style="text-align:center;">
-                                    '.$linha['qt_quantid'].' 
+                                    ' . $linha['qt_quantid'] . ' 
                                 </td>
                                 <td  style="text-align:center;">
-                                    '.$linha['ds_unidade'].'
+                                    ' . $linha['ds_unidade'] . '
                                 </td>
                             </tr>';
                     }
                     ?>
                 </table>
+                <h2 class="general-title">
+                    <span>Fotos</span>
+                </h2>
+                
+                <div class="slider-wrapper theme-default">
+                    <div id="nivoslider" class="nivoSlider">
+                        <?php
+                        $pasta = $usuario->nr_docucpf. '/';
+                        $sql = mysql_query("SELECT ds_galeria FROM usuario_galeria WHERE cd_usuario = ".$id);
+                        while ($linha = mysql_fetch_array($sql)){
+                            echo '<img src="'.URL_BASE.'img/usuario/'.$pasta.$linha['ds_galeria'].'" />';  
+                        }
+                        ?>
+                    </div>
+                </div>
+                
             </div>
 
             <div class="col-md-4">
                 <div class="img-responsive">
                     <?php
-                    if($usuario->ds_imagens == false){
+                    if ($usuario->ds_imagens == false) {
                         $img = "sem_imagem.jpg";
                     } else {
                         $img = $usuario->nr_docucpf . '/' . $usuario->ds_imagens;
@@ -97,10 +119,16 @@ $usuario->SelectUsuario($id);
                     </div>                   
                 </div>
             </div>
+
         </div>
     </div>
 </section>
-
+<script src="../js/jquery.nivo.slider.js"></script>
+<script type="text/javascript">
+    $(window).load(function () {
+        $('#nivoslider').nivoSlider();
+    });
+</script>
 <?php
 include_once('../footer.php');
 ?>

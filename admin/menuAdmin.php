@@ -24,7 +24,8 @@
             <div class="col-lg-3 col-md-3 col-sm-3">
                 <ul class="dm-sidebar-nav">
                     <?php if($_SESSION['aceUsuario'] >= 3){ ?>
-                        <li><a href="javascript:void(0);">Slide Início</a></li>
+                        <li><a href="slide.php">Slide Início</a></li>
+                        <li><a href="galeriaInteract.php">Galeria do Projeto</a></li>
                         <li><a href="sobre.php">Sobre Nós</a></li>
                     <?php
                     }

@@ -21,4 +21,6 @@ date_default_timezone_set('America/Sao_Paulo');
 define("NOME_SISTEMA","INTERACT"); //Nome do Sistema
 define("LOGO_PDF",PATH_IMG . "logo-relpdf.png"); //Logo nos relatórios de PDF
 define("MAX_IMG_USER",30); //Quantidade máxima de imagens galeria usuário
+define("MAX_IMG_SLIDE",5); //Quantidade máxima de imagens slide início
+define("MAX_IMG_GALERIA",30); //Quantidade máxima de imagens galeria projeto
 ?>
