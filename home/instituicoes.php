@@ -23,64 +23,56 @@ include_once('topo.php');
     </div>
 
     <div class="container general">
-        <div id="content" class="single col-lg-12 col-md-12 col-sm-12">
+        <div id="content" class="single col-lg-12 col-md-12 col-sm-12" style="padding-top: 0px;">
 
-            <div class="message text-center">
-                <h2>Ajude alguma das <span>Instiuições</span> cadastradas</h2>
-                <p>Confira quais são e como ajudá-las. Clique em cima da instituição desejada.</p>
+            <div class="message text-center" style="padding-top: 0px;">
+                <h2 style="margin: 0px;">Ajude alguma das instiuições cadastradas</h2>
+                <p style="margin: 0px;">Confira quais são e como ajudá-las. Clique em cima da instituição desejada.</p>
             </div>
-            <div class="clearfix"></div>
 
-            <section class="portfolio">
-                <div class="row">
-                    <?php
-                    $query = "SELECT DISTINCT(doacoes.cd_entidad) AS cd_entidad, COALESCE(usuario.ds_imagens,'') AS ds_imagens FROM doacoes
-                              INNER JOIN usuario ON usuario.cd_usuario = doacoes.cd_entidad";
-                    $resultado = mysql_query($query);
-                    $cont = 1;
+            <?php
+            $query = "SELECT DISTINCT(doacoes.cd_entidad) AS cd_entidad, COALESCE(usuario.ds_imagens,'') AS ds_imagens, UPPER(usuario.nm_usuario) AS nm_usuario, COALESCE(usuario.nr_telefon,'') AS nr_telefon FROM doacoes
+                      INNER JOIN usuario ON usuario.cd_usuario = doacoes.cd_entidad
+                      WHERE doacoes.cd_empresa = 1 ORDER BY doacoes.id_doacoes DESC";
+            $resultado = mysql_query($query);
+            while($linha = mysql_fetch_array($resultado)){
+                
+                if (empty($linha['ds_imagens'])) {
+                    $pasta = "sem_imagem.jpg";
+                } else {
 
-                    while($linha = mysql_fetch_array($resultado)){
-                        
-                        if(empty($linha['ds_imagens'])){
-                            $pasta = "sem_imagem.jpg";
-                        } else {
-                            
-                            $img = $linha['ds_imagens'];
-                            
-                            $a = explode('.',$img);
-                            $pasta = $a[0];
-                            $pasta = $pasta . '/' . $img;
-                            
-                        }
-                        
-                        if ($cont == 0) {
-                            echo '<div class="row">';
-                        }
-                        
-                        echo '<div class="col-lg-3 col-md-3 col-sm-6 ">
-                                <div class="portfolio-columns" >
-                                    <a href="detalhes.php?id=' . $linha['cd_entidad'] . '">
-                                        <img class="logos" src="' . URL_BASE . 'img/usuario/' . $pasta . '"  alt="">
-                                        <div>
-                                            <h3><br><br></h3>
-                                            <p><i class="icon-zoom-in"></i> Mais Informações</p>
+                    $img = $linha['ds_imagens'];
+
+                    $a = explode('.', $img);
+                    $pasta = $a[0];
+                    $pasta = $pasta . '/' . $img;
+                }
+                
+                $telefone = (isset($linha['nr_telefon']) && !empty($linha['nr_telefon'])) ? $linha['nr_telefon'] : 'Telefone não informado';
+                
+                $link = "detalhes.php?id=" . $linha['cd_entidad'];
+                
+                echo '<div class="col-lg-3 col-md-3 col-sm-6" data-effect="slide-bottom">
+                        <div class="shop-box">
+                            <div class="dm-product">
+                                <div class="dm-products-wrapper">
+                                    <div class="dm-product active show">
+                                        <a href="'.$link.'" title="">
+                                            <img src="' . URL_BASE . 'img/usuario/' . $pasta . '" alt="" />
+                                        </a>
+                                        <h4><a href="'.$link.'" title="">'.$linha['nm_usuario'].'</a></h4>
+                                        <div class="dm-pricing">
+                                            <a href="'.$link.'" title=""><span class="amount">'.$telefone.'</span></a>
                                         </div>
-                                    </a>
+                                    </div>
                                 </div>
-                              </div>';
-                        
-                        $cont++;
-                        if ($cont == 3) {
-                            echo '</div>';
-                            $cont = 0;
-                        }
-                    }
-                    ?>
-                </div>
-            </section>
-
-            <div class="clearfix"></div>
-
+                            </div>
+                        </div>
+                      </div>';
+                
+            }
+            ?>
+            
         </div>
     </div>
 </section>

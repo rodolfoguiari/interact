@@ -3,7 +3,8 @@ include_once('header.php');
 include_once('home/topo.php');
 ?>
 
-<section class="colon9">
+<!-- colon8, colon9, colon11 - altera a imagem de background -->
+<section class="colon8">
     <div class="container">
         
         <!-- Slide Início -->
@@ -321,53 +322,66 @@ include_once('home/topo.php');
         <!-- Fim Slide Início -->
 
         <div class="big-message text-center" style="padding-bottom: 5px;">
-            <h2>Seja bem vindo(a) ao projeto INTERACT</h2>
-            <p><i>O mundo precisa de gente que se preocupa com o próximo!</i></p>
+            <h2 style="margin-bottom: 0px;">DE OLHO EM QUEM PRECISA</h2>
+            <!--<p><i>O mundo precisa de pessoas que se preocupam com o próximo!</i></p>-->
+            <p><i>"De olho em quem precisa" foi desenvolvido como um canal de comunicação entre algumas entidades, que precisam de ajuda a todo momento, e pessoas que procuram dar essa assistência à elas.
+                   Entre e olhe de que forma você consegue colaborar com quem precisa!</i></p>
         </div>
         
         <div class="message text-center" style="padding-top: 5px;">
-            <h2>Veja abaixo algumas instituições participantes</h2>
+            <h2 style="margin-top: 0px; margin-bottom: 0px;">Veja abaixo algumas instituições participantes</h2>
             <p><i>Faça parte você também. <a href="<?php echo URL_BASE . 'home/login.php'; ?>">Clique aqui</a>, faça seu cadastro e anuncie. É simples e rápido!</i></p>
         </div>
 
-        <ul id="og-grid" class="og-grid">
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/01_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/01_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/02_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/02_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Slider</p>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/03_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/03_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
-                    </div>
-                </a>
-            </li>   
-            <li>
-                <a href="#" data-largesrc="<?php echo URL_BASE; ?>demos/08_demo.jpg" data-title="Lorem Ipsum Dolar Sit" data-description="Swiss chard pumpkin bunya nuts maize plantain aubergine napa cabbage soko coriander sweet pepper water spinach winter purslane shallot tigernut lentil beetroot.">
-                    <img width="250" src="<?php echo URL_BASE; ?>demos/08_demo.jpg" alt="img01"/>
-                    <div>
-                        <h5>Instituição Exemplo</h5>
-                        <p><i class="icon-folder-open-alt"></i> Detalhes</p>
-                    </div>
-                </a>
-            </li>
-        </ul>
+        <div class="container general">
+            <div class="row">
+                <?php
+                $query = "SELECT DISTINCT(doacoes.cd_entidad) AS cd_entidad, COALESCE(usuario.ds_imagens,'') AS ds_imagens, UPPER(usuario.nm_usuario) AS nm_usuario, COALESCE(usuario.nr_telefon,'') AS nr_telefon FROM doacoes
+                          INNER JOIN usuario ON usuario.cd_usuario = doacoes.cd_entidad
+                          WHERE doacoes.cd_empresa = 1 ORDER BY doacoes.id_doacoes DESC LIMIT 4";
+                $resultado = mysql_query($query);
+                while($linha = mysql_fetch_array($resultado)){
+
+                    if (empty($linha['ds_imagens'])) {
+                        $pasta = "sem_imagem.jpg";
+                    } else {
+
+                        $img = $linha['ds_imagens'];
+
+                        $a = explode('.', $img);
+                        $pasta = $a[0];
+                        $pasta = $pasta . '/' . $img;
+                    }
+
+                    $telefone = (isset($linha['nr_telefon']) && !empty($linha['nr_telefon'])) ? $linha['nr_telefon'] : 'Telefone não informado';
+
+                    $link = URL_BASE."home/detalhes.php?id=" . $linha['cd_entidad'];
+
+                    echo '<div class="col-lg-3 col-md-3 col-sm-6" data-effect="slide-bottom">
+                            <div class="shop-box">
+                                <div class="dm-product">
+                                    <div class="dm-products-wrapper">
+                                        <div class="dm-product active show">
+                                            <a href="'.$link.'" title="">
+                                                <img src="' . URL_BASE . 'img/usuario/' . $pasta . '" alt="" />
+                                            </a>
+                                            <h4><a href="'.$link.'" title="">'.$linha['nm_usuario'].'</a></h4>
+                                            <div class="dm-pricing">
+                                                <a href="'.$link.'" title=""><span class="amount">'.$telefone.'</span></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                          </div>';
+
+                }
+                ?>
+            </div>
+            <div class="row">
+                <center><a href="<?php echo URL_BASE.'home/instituicoes.php'; ?>">Visualizar mais instituições . . .</a></center>
+            </div>
+        </div>
         
         <!--<div class="container general">
             <div class="col-lg-8 col-md-8 col-sm-12">

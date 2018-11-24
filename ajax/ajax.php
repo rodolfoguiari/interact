@@ -364,7 +364,7 @@ if(!empty($acao)){
                     include_once('../wideimage/WideImage.php');
                     $image = WideImage::load($upTemp); //Carrega a imagem utilizando a WideImage
                     $image = $image->resize(1850,600, 'fill'); //Redimensiona a imagem para ? de largura e ? de altura, mantendo sua proporção no máximo possível
-                    //$image = $image->crop('center','center',353,119); //Corta a imagem do centro, forçando sua altura e largura
+                    //$image = $image->crop('center','center',1850,600); //Corta a imagem do centro, forçando sua altura e largura
 
                     $image->saveToFile($upPasta.$ds_imagens); //Salva a imagem
 
@@ -405,6 +405,11 @@ if(!empty($acao)){
                     //$image = $image->crop('center','center',353,119); //Corta a imagem do centro, forçando sua altura e largura
 
                     $image->saveToFile($upPasta.$ds_imagens); //Salva a imagem
+                    
+                    $image2 = WideImage::load($upTemp); //Carrega a imagem utilizando a WideImage
+                    $image2 = $image2->resize(540,370,'fill');
+                    $image2 = $image2->crop('center','center',540,370);
+                    $image2->saveToFile($upPasta.'thumb/'.$ds_imagens);
 
                     $insertImg = mysql_query("INSERT INTO galeria_projeto (cd_empresa, ds_galeria, dt_inclusa, hr_inclusa) VALUES ('1','".$ds_imagens."','".DtAtual()."','".HrAtual()."')");
                     
@@ -541,6 +546,7 @@ if(!empty($acao)){
                 mysql_query("COMMIT");
                 
                 unlink('../img/galeria/'.$img);
+                unlink('../img/galeria/thumb/'.$img);
                 
                 echo 'QUERY_TRUE';
                 exit;
@@ -741,7 +747,7 @@ if(!empty($acao)){
 
                 $updateImg = mysql_query("UPDATE empdetalhe SET ds_imgtopo ='quem_topo.png'");
             }
-        }elseif(isset($_FILES['foto2'])){
+        } elseif(isset($_FILES['foto2'])){
             if($_FILES['foto2']['error'] == UPLOAD_ERR_OK){
 
                 //Propriedades do arquivo

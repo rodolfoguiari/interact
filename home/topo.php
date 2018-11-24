@@ -40,6 +40,9 @@
                         <li class="dropdown" id="sobre">
                             <a href="<?php echo URL_BASE; ?>home/sobre.php">Sobre Nós</a>
                         </li>
+                        <li class="dropdown" id="galeriaProject">
+                            <a href="<?php echo URL_BASE; ?>home/galeriaProject.php">Galeria</a>
+                        </li>
                         <li class="dropdown" id="instituicoes">
                             <a href="<?php echo URL_BASE; ?>home/instituicoes.php">Instituições</a>
                         </li>
@@ -136,6 +139,8 @@
 
                 if(data == 'sobre'){
                     $("#sobre").addClass('active');
+                } else if(data == 'galeriaProject'){
+                    $("#galeriaProject").addClass('active');
                 } else if(data == 'instituicoes'){
                     $("#instituicoes").addClass('active');
                 } else if(data == 'contato'){

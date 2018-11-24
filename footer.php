@@ -20,10 +20,10 @@
                             </h2>
                             <ul class="flickr">
                                 <?php
-                                $sqlGaleria = mysql_query("SELECT ds_galeria AS galRodape FROM galeria_projeto WHERE cd_empresa = 1 ORDER BY ds_galeria DESC");
+                                $sqlGaleria = mysql_query("SELECT ds_galeria AS galRodape FROM galeria_projeto WHERE cd_empresa = 1 ORDER BY ds_galeria DESC LIMIT 10");
                                 while($qr = mysql_fetch_array($sqlGaleria)){
                                     echo '<li><a href="javascript:void(0);" title="">
-                                            <img class="img-thumbnail img-rounded" src="'.URL_BASE.'/img/galeria/'.$qr['galRodape'].'" width="54" height="54" alt="" onclick="viewImgProjeto(\''.$qr['galRodape'].'\')">
+                                            <img class="img-thumbnail img-rounded" src="'.URL_BASE.'/img/galeria/thumb/'.$qr['galRodape'].'" width="54" height="54" alt="" onclick="viewImgProjeto(\''.$qr['galRodape'].'\')">
                                           </a></li>';
                                 }
                                 ?>
@@ -98,6 +98,7 @@
                             <ul class="footer-menu">
                                 <li><a href="<?php echo URL_BASE; ?>" title="#">Início</a></li>
                                 <li><a href="<?php echo URL_BASE.'home/sobre.php'; ?>" title="#">Sobre Nós</a></li>
+                                <li><a href="<?php echo URL_BASE.'home/galeriaProject.php'; ?>" title="#">Galeria</a></li>
                                 <li><a href="<?php echo URL_BASE.'home/instituicoes.php'; ?>" title="#">Instituições</a></li>
                                 <li><a href="<?php echo URL_BASE.'home/contato.php'; ?>" title="#">Contato</a></li>
                                 <li><a href="<?php echo URL_BASE.'home/login.php'; ?>" title="#">Área Restrita</a></li>

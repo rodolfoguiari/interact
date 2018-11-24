@@ -75,6 +75,12 @@ include_once('config/connect_base.php');
         <script src="<?php echo URL_BASE; ?>js/jquery.unveilEffects.min.js"></script>
         
         <script src="<?php echo URL_BASE; ?>js/fhmm.js"></script>
+        <script src="<?php echo URL_BASE; ?>zoombox/zoombox.js"></script>
+        <script>
+            jQuery(document).ready(function($){
+                $(".zoombox").zoomBox();
+            });
+        </script>
         <script src="<?php echo URL_BASE; ?>js/grid.js"></script>
         <script>
             $(function () {
