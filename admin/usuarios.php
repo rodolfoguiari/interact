@@ -15,6 +15,7 @@ include_once('menuAdmin.php');
                 <th>Endereço</th>
                 <th>Telefone</th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody id="tableEdtUser"></tbody>
@@ -310,6 +311,29 @@ include_once('menuAdmin.php');
             
         }
         ,"html");
+        
+    }
+    
+    function edtStatus(id){
+        
+        if(confirm("CONFIRMA ALTERAÇÃO DE STATUS ?")){
+            
+            $.post("../ajax/ajax.php?acao=edtStatus",{id:id},
+            function(data){
+                
+                if(data == 'QUERY_TRUE'){
+                    listaUser();
+                } else if(data == 'QUERY_FALSE'){
+                    AvisoDev('ERRO AO ALTERAR STATUS. TENTE NOVAMENTE !','error',5000);
+                    listaUser();
+                } else {
+                    alert(data);
+                }
+                
+            }
+            ,"html");
+            
+        }
         
     }
     

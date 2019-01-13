@@ -60,33 +60,41 @@ if(!empty($acao)){
                 exit;
             } else {
                 
-                if(strlen($nr_cnpjcpf) != 14){
-                    echo 'CNPJ_FALSE';
+                include_once('../class/classPegaId.php');
+                $id_proximo = new classPegaId();
+                $cd_usuario = $id_proximo->PegaUltimoId('cd_usuario','usuario');
+
+                mysql_query("SET AUTOCOMMIT=0");
+                mysql_query("START TRANSACTION");
+
+                $query = "INSERT INTO usuario (cd_empresa,cd_statuss,cd_usuario,nm_usuario,ds_enderec,nr_enderec,ds_complem,ds_bairros,nr_cepusua,cd_paisess,cd_estados,cd_cidades,nr_telefon,nr_celular,cd_operado,
+                          ds_emailss,dt_nascime,cd_generos,nr_documrg,nr_docucpf,cd_acessos,ds_senhass,dt_inclusa) VALUES ('1','1','".$cd_usuario."','".$nm_usuario."','".$ds_enderec."','".$nr_enderec."','',
+                          '".$ds_bairros."','".$nr_endecep."','1','".$cd_estados."','".$cd_cidades."','".$nr_telefon."','','0','".$ds_emailss."','".$dt_nascime."','".$cd_generos."','','".$nr_cnpjcpf."','1',
+                          '".$ds_senhass."','".DtAtual()."')";
+
+                $insert = mysql_query($query);
+                if($insert == true){
+                    mysql_query("COMMIT");
+                    
+                    //Enviar email avisando novo cadastro
+                    $sql = mysql_query("SELECT UPPER(nm_empresa) AS nm_empresa, ds_interne FROM empresa LIMIT 1");
+                    $qr = mysql_fetch_assoc($sql);
+                    $nomeDestinatario = $qr['nm_empresa'];
+                    $emailDestinatario = $qr['ds_interne'];
+
+                    $assunto = 'NOVO CADASTRO - ' . NOME_SISTEMA;
+                    $mensagem = 'NOME: ' . $nm_usuario . '<br/>'
+                              . 'ENDERECO: ' . $ds_enderec . ', ' . $nr_enderec . ' - ' . $ds_bairros . '<br/>'
+                              . 'TELEFONE: ' . $nr_telefon . '<br/>';
+                    
+                    $emailAviso = enviaEmail($nm_usuario, $ds_emailss, $nomeDestinatario, $emailDestinatario, CHARSET, $assunto, $mensagem, 'string');
+                    
+                    echo 'QUERY_TRUE';
                     exit;
                 } else {
-                    
-                    include_once('../class/classPegaId.php');
-                    $id_proximo = new classPegaId();
-                    $cd_usuario = $id_proximo->PegaUltimoId('cd_usuario','usuario');
-
-                    mysql_query("SET AUTOCOMMIT=0");
-                    mysql_query("START TRANSACTION");
-
-                    $query = "INSERT INTO usuario (cd_empresa,cd_usuario,nm_usuario,ds_enderec,nr_enderec,ds_complem,ds_bairros,nr_cepusua,cd_paisess,cd_estados,cd_cidades,nr_telefon,nr_celular,cd_operado,ds_emailss,dt_nascime,
-                              cd_generos,nr_documrg,nr_docucpf,cd_acessos,ds_senhass,dt_inclusa) VALUES ('1','".$cd_usuario."','".$nm_usuario."','".$ds_enderec."','".$nr_enderec."','','".$ds_bairros."','".$nr_endecep."','1',
-                              '".$cd_estados."','".$cd_cidades."','".$nr_telefon."','','0','".$ds_emailss."','".$dt_nascime."','".$cd_generos."','','".$nr_cnpjcpf."','1','".$ds_senhass."','".DtAtual()."')";
-
-                    $insert = mysql_query($query);
-                    if($insert == true){
-                        mysql_query("COMMIT");
-                        echo 'QUERY_TRUE';
-                        exit;
-                    } else {
-                        mysql_query("ROLLBACK");
-                        echo 'QUERY_FALSE';
-                        exit;
-                    }
-                    
+                    mysql_query("ROLLBACK");
+                    echo 'QUERY_FALSE';
+                    exit;
                 }
                 
             }
@@ -105,7 +113,7 @@ if(!empty($acao)){
             unset($_SESSION['cpfUsuario']);
             unset($_SESSION['aceUsuario']);
 
-            $sql = mysql_query("SELECT cd_usuario, UPPER(nm_usuario) AS nm_usuario, nr_docucpf, cd_acessos FROM usuario
+            $sql = mysql_query("SELECT cd_usuario, UPPER(nm_usuario) AS nm_usuario, nr_docucpf, cd_acessos, COALESCE(cd_statuss,0) AS cd_statuss FROM usuario
                                 WHERE nr_docucpf = '".$nr_cnpjcpf_login."' AND ds_senhass = '".$ds_senhass_login."'");
             $totLine = mysql_num_rows($sql);
 
@@ -113,13 +121,23 @@ if(!empty($acao)){
                 
                 $qr = mysql_fetch_assoc($sql);
                 
-                $_SESSION['codUsuario'] = $qr['cd_usuario'];
-                $_SESSION['nomUsuario'] = $qr['nm_usuario'];
-                $_SESSION['cpfUsuario'] = $qr['nr_docucpf'];
-                $_SESSION['aceUsuario'] = $qr['cd_acessos'];
-                
-                echo '<script type="text/javascript">window.location = \'../admin/inicioAdmin.php\';</script>';
-                exit;
+                if($qr['cd_statuss'] == 1){
+                    echo 'USER_PENDENTE';
+                    exit;
+                } elseif($qr['cd_statuss'] == 2){
+                    echo 'USER_INATIVO';
+                    exit;
+                } else {
+                    
+                    $_SESSION['codUsuario'] = $qr['cd_usuario'];
+                    $_SESSION['nomUsuario'] = $qr['nm_usuario'];
+                    $_SESSION['cpfUsuario'] = $qr['nr_docucpf'];
+                    $_SESSION['aceUsuario'] = $qr['cd_acessos'];
+
+                    echo '<script type="text/javascript">window.location = \'../admin/inicioAdmin.php\';</script>';
+                    exit;
+                    
+                }
                 
             } else {
                 echo 'USER_FALSE';
@@ -141,6 +159,36 @@ if(!empty($acao)){
         
         echo json_encode($usuario);
         exit;
+        
+    } elseif($acao == 'edtStatus'){
+        
+        $user = $_POST['id'];
+        
+        include_once('../class/classUsuario.php');
+        $usuario = new classUsuario();
+        $usuario->SelectUsuario($user);
+        
+        mysql_query("SET AUTOCOMMIT=0");
+        mysql_query("START TRANSACTION");
+        
+        $statuss = 0;
+        if($usuario->cd_statuss == 0){
+            $statuss = 1;
+        } elseif($usuario->cd_statuss == 1){
+            $statuss = 2;
+        }
+        
+        $update = mysql_query("UPDATE usuario SET cd_statuss = '".$statuss."' WHERE cd_usuario = '".$user."'");
+        
+        if($update == true){
+            mysql_query("COMMIT");
+            echo 'QUERY_TRUE';
+            exit;
+        } else {
+            mysql_query("ROLLBACK");
+            echo 'QUERY_FALSE';
+            exit;
+        }
         
     } elseif($acao == 'salvarEdtUser'){
         
@@ -188,7 +236,7 @@ if(!empty($acao)){
         
         $result = "";
         
-        $query = "SELECT cd_usuario, UPPER(nm_usuario) AS nm_usuario, UPPER(ds_enderec) AS ds_enderec, UPPER(nr_enderec) AS nr_enderec, nr_telefon
+        $query = "SELECT cd_usuario, UPPER(nm_usuario) AS nm_usuario, UPPER(ds_enderec) AS ds_enderec, UPPER(nr_enderec) AS nr_enderec, nr_telefon, COALESCE(cd_statuss,0) AS cd_statuss, cd_acessos
                   FROM usuario WHERE 1 = 1";
         
         if($_SESSION['aceUsuario'] < 3){
@@ -197,14 +245,30 @@ if(!empty($acao)){
         
         $sql = mysql_query($query . " ORDER BY nm_usuario ASC");
         while($qr = mysql_fetch_array($sql)){
+            
+            $statuss = 'Ativo';
+            $corStatuss = 'success';
+            if($qr['cd_statuss'] == 1){
+                $statuss = 'Pendente';
+                $corStatuss = 'warning';
+            } elseif($qr['cd_statuss'] == 2){
+                $statuss = 'Inativo';
+                $corStatuss = 'danger';
+            }
 
             $result .= '<tr>
                             <td>'.$qr['cd_usuario'].'</td>
                             <td>'.$qr['nm_usuario'].'</td>
                             <td>'.$qr['ds_enderec']. ', ' . $qr['nr_enderec'] .'</td>
                             <td>'.$qr['nr_telefon'].'</td>
-                            <td><button type="button" class="btn btn-sm btn-primary" onclick="edtUser('.$qr['cd_usuario'].')">Editar</button></td>
-                        </tr>';
+                            <td><button type="button" class="btn btn-sm btn-primary" onclick="edtUser('.$qr['cd_usuario'].')">Editar</button></td>';
+            
+            //Criar botão para alterar status somente se o usuario não for nível desenvolvedor.
+            if(($qr['cd_acessos'] != 99 && $qr['cd_acessos'] != 3) && $_SESSION['aceUsuario'] >= 3){
+                $result .= '<td><button type="button" class="btn btn-sm btn-'.$corStatuss.' width-100-porc" onclick="edtStatus('.$qr['cd_usuario'].')">'.$statuss.'</button></td>';
+            }
+            
+            $result .= '</tr>';
 
         }
         

@@ -126,6 +126,22 @@
             </div>
         </div>
         
+        <!-- Modal GiraGira -->
+        <div class="modal" id="modalGiraGira" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document" style="margin-top:100px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="myModalLabel">Aguarde Processando . . .</h4>
+                    </div>
+                    <div class="modal-body">
+                        <center>
+                            <img src="<?php echo URL_BASE.'img/giragira.gif'; ?>" alt="" style="width:50%;" />
+                        </center>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <script src="<?php echo URL_BASE; ?>js/application.js"></script>
 
         <script type="text/javascript">
@@ -162,6 +178,20 @@
             function viewImgProjeto(img){
                 $("#input_view_project").attr("src","<?php echo URL_BASE . 'img/galeria/'; ?>" + img);
                 $("#modalViewProj").modal('show');
+            }
+            
+            function giragira(acao){
+                
+                if(acao == 'N'){
+                    $("#modalGiraGira").modal('hide');
+                } else {
+                    $('#modalGiraGira').modal({
+                        keyboard: false,
+                        backdrop: 'static',
+                        show: true
+                    });
+                }
+                
             }
             
         </script>

@@ -160,14 +160,13 @@ if(isset($_SESSION['cpfUsuario']) && !empty($_SESSION['cpfUsuario'])){
         var dt_nascime = $("#dt_nascime").val();
         var cd_generos = $("#cd_generos").val();
         
+        giragira('S');
         $.post("../ajax/ajax.php?acao=novaConta",{nm_usuario:nm_usuario,ds_emailss:ds_emailss,nr_cnpjcpf:nr_cnpjcpf,ds_senhass:ds_senhass,ds_enderec:ds_enderec,nr_enderec:nr_enderec,ds_bairros:ds_bairros,
                                                   nr_endecep:nr_endecep,cd_estados:cd_estados,cd_cidades:cd_cidades,nr_telefon:nr_telefon,dt_nascime:dt_nascime,cd_generos:cd_generos},
         function(data){
+            giragira('N');
             
-            if(data == 'CNPJ_FALSE'){
-                AvisoDev('CNPJ INVÁLIDO. TENTE NOVAMENTE !','warning',3000);
-                $("#nr_cnpjcpf").focus();
-            } else if(data == 'USER_EXIST'){
+            if(data == 'USER_EXIST'){
                 AvisoDev('CNPJ JÁ CADASTRADO. TENTE NOVAMENTE !','warning',3000);
                 $("#nr_cnpjcpf").focus();
             } else if(data == 'FIELD_FALSE'){
@@ -177,14 +176,21 @@ if(isset($_SESSION['cpfUsuario']) && !empty($_SESSION['cpfUsuario'])){
                 
                 $("#nm_usuario").val('');
                 $("#ds_emailss").val('');
-                $("#cd_estados").val('0');
                 $("#nr_cnpjcpf").val('');
-                $("#nr_telefon").val('');
+                $("#ds_senhass").val('');
+                $("#ds_enderec").val('');
+                $("#nr_enderec").val('');
+                $("#ds_bairros").val('');
+                $("#nr_endecep").val('');
+                $("#cd_estados").val('0');
                 $("#cd_cidades").val('0');
+                $("#nr_telefon").val('');
                 $("#dt_nascime").val('1980-01-01');
                 $("#cd_generos").val('0');
                 
                 AvisoDev('OPERAÇÃO EFETUADA COM SUCESSO !','success',3000);
+                
+                selectEstado();
                 
             } else {
                 AvisoDev('ERRO! TENTE NOVAMENTE . . .','error',3000);
@@ -211,8 +217,12 @@ if(isset($_SESSION['cpfUsuario']) && !empty($_SESSION['cpfUsuario'])){
             $.post("../ajax/ajax.php?acao=loginUser",{nr_cnpjcpf_login:nr_cnpjcpf_login,ds_senhass_login:ds_senhass_login},
             function(data){
                 $("#resposta").html(data);
-
-                if(data == 'USER_FALSE'){
+                
+                if(data == 'USER_PENDENTE'){
+                    AvisoDev('USUÁRIO PENDENTE DE APROVAÇÃO DE CADASTRO. FALE COM UM ADMINISTRADOR DO SITE !','warning',8000);
+                } else if(data == 'USER_INATIVO'){
+                    AvisoDev('USUÁRIO INATIVO. ACESSO NÃO PERMITIDO !','error',5000);
+                } else if(data == 'USER_FALSE'){
                     AvisoDev('USUÁRIO NÃO CADASTRADO OU DADOS INCORRETOS. TENTE NOVAMENTE !','warning',5000);
                 }
 

@@ -1,6 +1,7 @@
 <?php
 class classUsuario{
     public $cd_usuario;
+    public $cd_statuss;
     public $nm_usuario;
     public $ds_enderec;
     public $nr_enderec;
@@ -33,6 +34,7 @@ class classUsuario{
                             WHERE usuario.cd_usuario = '$id_usuario'");
         while($qr = mysql_fetch_array($sql)){
             $this->cd_usuario = $qr['cd_usuario'];
+            $this->cd_statuss = $qr['cd_statuss'];
             $this->nm_usuario = $qr['nm_usuario'];
             $this->ds_enderec = $qr['ds_enderec'];
             $this->nr_enderec = $qr['nr_enderec'];
